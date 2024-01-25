@@ -3,3 +3,4 @@
 .pyv/
 .env
 *.pyc
+db.sqlite3
