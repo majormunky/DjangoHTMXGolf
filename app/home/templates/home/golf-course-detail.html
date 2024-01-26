@@ -1,6 +1,39 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>{{obj.name}}</h1>
-
+<div class="row">
+    <div class="col-6">
+        <div class="card">
+            <div class="card-header">{{obj.name}}</div>
+            <div class="card-body"></div>
+            <div class="card-footer"></div>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="card">
+            <div class="card-header">Holes</div>
+            <div class="card-body">
+                {% if obj.hole_set.all %}
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th style="width: 5%">&nbsp;</th>
+                            <th>Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for hole in obj.hole_set.all %}
+                        <tr>
+                            <td><a href="#" class="btn btn-primary btn-sm">View</a></td>
+                            <td>{{hole.name}}</td>                    
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% endif %}
+            </div>
+            <div class="card-footer"></div>
+        </div>
+    </div>
+</div>
 {% endblock %}
