@@ -35,3 +35,9 @@ def create_golf_course(request):
     else:
         form = forms.GolfCourseForm()
     return render(request, "home/form.html", {"form": form})
+
+
+def hole_detail(request, pk):
+    hole_data = get_object_or_404(models.Hole, pk=pk)
+    course_data = hole_data.course
+    return render(request, "home/hole-detail.html", {"obj": hole_data, "course": course_data})

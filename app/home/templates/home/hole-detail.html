@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">{{obj.name}}</div>
+            <div class="card-body">
+                <p class="card-text">Course: <a href="{% url 'home:golf-course-detail' course.id %}">{{course.name}}</a></p>
+                <p class="card-text">No Tees Found</p>
+            </div>
+            <div class="card-footer"><a href="#" class="btn btn-primary btn-sm">Add Tee</a></div>
+        </div>
+    </div>
+    <div id="new-tee-form"></div>
+</div>
+{% endblock %}

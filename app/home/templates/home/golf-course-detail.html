@@ -24,7 +24,7 @@
                     <tbody>
                         {% for hole in obj.hole_set.all %}
                         <tr>
-                            <td><a href="#" class="btn btn-primary btn-sm">View</a></td>
+                            <td><a href="{% url 'home:hole-detail' hole.id %}" class="btn btn-primary btn-sm">View</a></td>
                             <td>{{hole.name}}</td>                    
                         </tr>
                         {% endfor %}
