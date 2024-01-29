@@ -60,3 +60,19 @@ class Game(models.Model):
         self.status = "active"
         self.date_played = timezone.now()
         self.save()
+
+
+class Player(models.Model):
+    name = models.CharField(max_length=64)
+    user_account = models.OneToOneField(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True
+    )
+    added_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="added_by"
+    )
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        unique_together = ["name", "added_by"]
