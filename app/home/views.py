@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
 from . import models
 from . import forms
 
@@ -45,8 +46,20 @@ def hole_detail(request, pk):
     return render(request, "home/hole-detail.html", {"obj": hole_data, "course": course_data, "tee_list": tee_list})
 
 
+@login_required
 def players(request):
-    return render(request, "home/players.html", {})
+    player_list = models.Player.objects.filter(added_by=request.user)
+    if request.method == "POST":
+        form = forms.PlayerForm(request.POST)
+        if form.is_valid():
+            player = form.save(commit=False)
+            my_player = form.cleaned_data["my_player"]
+            if my_player:
+                player.user_account = request.user
+            player.added_by = request.user
+            player.save()
+            
+    return render(request, "home/players.html", {"player_list": player_list})
 
 
 def htmx_create_tee(request, pk):
@@ -57,3 +70,8 @@ def htmx_create_tee(request, pk):
 def htmx_create_course(request):
    form = forms.GolfCourseForm()
    return render(request, "home/crispy-form.html", {"form": form, "form_id": "create-course-form"})
+
+
+def htmx_create_player(request):
+    form = forms.PlayerForm()
+    return render(request, "home/crispy-form.html", {"form": form, "form_id": "create-player-form"})

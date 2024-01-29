@@ -12,4 +12,5 @@ urlpatterns = [
     path("hole/<int:pk>/", views.hole_detail, name="hole-detail"),
     path("hole/<int:pk>/create-tee/", views.htmx_create_tee, name="htmx-create-tee"),
     path("players/", views.players, name="players"),
+    path("players/create/", views.htmx_create_player, name="htmx-create-player"),
 ]
