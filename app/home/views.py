@@ -45,6 +45,10 @@ def hole_detail(request, pk):
     return render(request, "home/hole-detail.html", {"obj": hole_data, "course": course_data, "tee_list": tee_list})
 
 
+def players(request):
+    return render(request, "home/players.html", {})
+
+
 def htmx_create_tee(request, pk):
     form = forms.TeeForm()
     return render(request, "home/crispy-form.html", {"form": form, "form_id": "create-tee-form"})
@@ -53,4 +57,3 @@ def htmx_create_tee(request, pk):
 def htmx_create_course(request):
    form = forms.GolfCourseForm()
    return render(request, "home/crispy-form.html", {"form": form, "form_id": "create-course-form"})
-
