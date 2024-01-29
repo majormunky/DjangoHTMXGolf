@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 
 HOLE_CHOICES = (
@@ -34,3 +35,28 @@ class Tee(models.Model):
     name = models.CharField(max_length=64)
     distance = models.CharField(max_length=10)
     hole = models.ForeignKey(Hole, on_delete=models.CASCADE)
+
+
+class Game(models.Model):
+    STATUS_CHOICES = (
+        ("setup", "Setup"),
+        ("active", "Active"),
+        ("completed", "Completed"),
+        ("not_finished", "Not Finished")
+    )
+
+    date_played = models.DateTimeField(blank=True, null=True)
+    course = models.ForeignKey(GolfCourse, on_delete=models.CASCADE)
+    holes_played = models.CharField(
+        max_length=64, choices=HOLE_CHOICES, default=HOLE_CHOICES[0][0]
+    )
+    status = models.CharField(
+        max_length=64, choices=STATUS_CHOICES, default=STATUS_CHOICES[0][0]
+    )
+    league_game = models.BooleanField(default=False)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    def start(self):
+        self.status = "active"
+        self.date_played = timezone.now()
+        self.save()
