@@ -15,5 +15,6 @@ urlpatterns = [
     path("players/<int:pk>/", views.player_detail, name="player-detail"),
     path("players/create/<slug:form_slug>/", views.htmx_create_form, name="htmx-create-player"),
     path("games/", views.games, name="games"),
+    path("games/<int:pk>/", views.game_detail, name="game-detail"),
     path("games/create/<slug:form_slug>/", views.htmx_create_form, name="htmx-create-game"),
 ]

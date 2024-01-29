@@ -17,7 +17,7 @@
             <tbody class="align-middle">
             {% for game in game_list %}
             <tr>
-                <td><a href="#" class="btn btn-primary btn-sm">View</a></td>
+                <td><a href="{% url 'home:game-detail' game.id %}" class="btn btn-primary btn-sm">View</a></td>
                 <td>{{game.course.name}}</td>
                 <td>{{game.get_status_display}}</td>
             </tr>

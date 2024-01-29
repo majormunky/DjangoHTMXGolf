@@ -81,6 +81,12 @@ def games(request):
     return render(request, "home/games.html", {"game_list": game_list})
 
 
+@login_required
+def game_detail(request, pk):
+    game_data = get_object_or_404(models.Game, pk=pk)
+    return render(request, "home/game-detail.html", {"game_data": game_data})
+
+
 def htmx_create_form(request, form_slug):
     form = utils.get_form_by_slug(form_slug)
     return render(request, "home/crispy-form.html", {"form": form, "form_id": form_slug})
