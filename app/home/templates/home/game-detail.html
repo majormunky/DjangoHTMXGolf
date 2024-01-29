@@ -2,9 +2,48 @@
 
 {% block content %}
 <div class="row">
-    <div class="col-12">
+    <div class="col-6">
         <h1>Game Detail</h1>
         <p>Course: {{game_data.course.name}}</p>
     </div>
+    <div class="col-6">
+        <div class="card">
+            <div class="card-header">Players</div>
+            <div class="card-body">
+                {% if player_links %}
+                <table class="table table-striped">
+                    {% for link in player_links %}
+                    <tr>
+                        <td>{{link.player.name}}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                {% else %}
+                <p class="card-text">No players found</p>
+                {% endif %}
+            </div>
+            <div class="card-footer">
+                <button hx-get="{% url 'home:htmx-create-player-form' game_data.id %}" hx-target="#add-player-form" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#add-player-modal">Add Player</button>
+            </div>
+        </div>
+    </div>
 </div>
+
+<div class="modal fade" id="add-player-modal" tabindex="-1" aria-labelledby="add-player-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="add-player-modal-label">Add Player to Game</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="add-player-form">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" form="add-player-to-game-form">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}

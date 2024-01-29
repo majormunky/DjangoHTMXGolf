@@ -84,7 +84,28 @@ def games(request):
 @login_required
 def game_detail(request, pk):
     game_data = get_object_or_404(models.Game, pk=pk)
-    return render(request, "home/game-detail.html", {"game_data": game_data})
+    player_links = models.PlayerGameLink.objects.filter(game=game_data)
+    if request.method == "POST":
+        form = forms.PlayerGameLinkForm(request.POST)
+        if form.is_valid():
+            link = form.save(commit=False)
+            link.game = game_data
+            link.save()
+    return render(request, "home/game-detail.html", {"game_data": game_data, "player_links": player_links})
+
+
+@login_required
+def htmx_create_players_form(request, pk):
+    game_data = get_object_or_404(models.Game, pk=pk)
+    existing_player_links = models.PlayerGameLink.objects.filter(game=game_data)
+    existing_players = []
+    for link in existing_player_links:
+        existing_players.append(link.player.id)
+
+    form_queryset = models.Player.objects.filter(added_by=request.user).exclude(id__in=existing_players)
+    form = forms.PlayerGameLinkForm()
+    form.fields["player"].queryset = form_queryset
+    return render(request, "home/crispy-form.html", {"form": form, "form_id": "add-player-to-game-form"})
 
 
 def htmx_create_form(request, form_slug):

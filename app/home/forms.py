@@ -84,4 +84,20 @@ class GameForm(forms.ModelForm):
             "league_game",
         ]
 
+
+class PlayerGameLinkForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Fieldset(
+                "",
+                "player",
+            )
+        )
         
+    class Meta:
+        model = models.PlayerGameLink
+        fields = [
+            "player"
+        ]
