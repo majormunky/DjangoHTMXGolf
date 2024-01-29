@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from . import models
 from . import forms
+from . import utils
 
 
 def index(request):
@@ -80,34 +81,6 @@ def games(request):
     return render(request, "home/games.html", {"game_list": game_list})
 
 
-def get_form_by_slug(slug):
-    form = None
-    if slug == "create-tee-form":
-        form = forms.TeeForm()
-    elif slug == "create-course-form":
-        form = forms.CourseForm()
-    elif slug == "create-player-form":
-        form = forms.PlayerForm()
-    elif slug == "create-game-form":
-        form = forms.GameForm()
-    return form
-
-
-def htmx_create_tee(request, pk):
-    form = forms.TeeForm()
-    return render(request, "home/crispy-form.html", {"form": form, "form_id": "create-tee-form"})
-
-
-def htmx_create_course(request):
-   form = forms.GolfCourseForm()
-   return render(request, "home/crispy-form.html", {"form": form, "form_id": "create-course-form"})
-
-
-def htmx_create_player(request):
-    form = forms.PlayerForm()
-    return render(request, "home/crispy-form.html", {"form": form, "form_id": "create-player-form"})
-
-
 def htmx_create_form(request, form_slug):
-    form = get_form_by_slug(form_slug)
+    form = utils.get_form_by_slug(form_slug)
     return render(request, "home/crispy-form.html", {"form": form, "form_id": form_slug})

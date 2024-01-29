@@ -31,7 +31,7 @@
                 {% endif %}
             </div>
             <div class="card-footer">
-                <button hx-get="{% url 'home:htmx-create-tee' obj.id %}" hx-target="#new-tee-form" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#add-tee-modal">Add Tee</button>
+                <button hx-get="{% url 'home:htmx-create-tee' 'create-tee-form' %}" hx-target="#new-tee-form" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#add-tee-modal">Add Tee</button>
             </div>
         </div>
     </div>

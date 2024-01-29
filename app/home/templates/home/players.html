@@ -19,7 +19,7 @@
         {% else %}
         <p>No players have been setup</p>
         {% endif %}
-        <button hx-get="{% url 'home:htmx-create-player' %}" hx-target="#new-player-form" data-bs-toggle="modal" data-bs-target="#add-player-modal" class="btn btn-primary btn-sm">Create Player</button>
+        <button hx-get="{% url 'home:htmx-create-player' 'create-player-form' %}" hx-target="#new-player-form" data-bs-toggle="modal" data-bs-target="#add-player-modal" class="btn btn-primary btn-sm">Create Player</button>
     </div>
 </div>
 
