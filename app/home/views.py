@@ -62,6 +62,12 @@ def players(request):
     return render(request, "home/players.html", {"player_list": player_list})
 
 
+@login_required
+def player_detail(request, pk):
+    player_data = get_object_or_404(models.Player, pk=pk)
+    return render(request, "home/player-detail.html", {"player_data": player_data})
+
+
 def htmx_create_tee(request, pk):
     form = forms.TeeForm()
     return render(request, "home/crispy-form.html", {"form": form, "form_id": "create-tee-form"})
