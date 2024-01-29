@@ -22,13 +22,13 @@ class TeeForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
+        self.helper.form_id = "create-tee-form"
         self.helper.layout = Layout(
             Fieldset(
-                "New Tee",
+                "",
                 "name",
                 "distance"
-            ),
-            Submit("submit", "Submit", css_class="btn btn-primary btn-sm")
+            )
         )
         
     class Meta:
