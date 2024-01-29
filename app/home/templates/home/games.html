@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1>Games</h1>
+
+        {% if game_list %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th style="width: 5%;">&nbsp;</th>
+                    <th>Course</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody class="align-middle">
+            {% for game in game_list %}
+            <tr>
+                <td><a href="#" class="btn btn-primary btn-sm">View</a></td>
+                <td>{{game.course.name}}</td>
+                <td>{{game.get_status_display}}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No Games Found</p>
+        {% endif %}
+        <button hx-get="{% url 'home:htmx-create-game' 'create-game-form' %}" hx-target="#new-game-form" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#new-game-modal">Create Game</button>
+    </div>
+</div>
+
+<div class="modal fade" id="new-game-modal" tabindex="-1" aria-labelledby="new-game-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Create Game</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="new-game-form">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" form="create-game-form">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

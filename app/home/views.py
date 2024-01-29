@@ -68,6 +68,31 @@ def player_detail(request, pk):
     return render(request, "home/player-detail.html", {"player_data": player_data})
 
 
+@login_required
+def games(request):
+    game_list = models.Game.objects.filter(created_by=request.user)
+    if request.method == "POST":
+        form = forms.GameForm(request.POST)
+        if form.is_valid():
+            game = form.save(commit=False)
+            game.created_by = request.user
+            game.save()
+    return render(request, "home/games.html", {"game_list": game_list})
+
+
+def get_form_by_slug(slug):
+    form = None
+    if slug == "create-tee-form":
+        form = forms.TeeForm()
+    elif slug == "create-course-form":
+        form = forms.CourseForm()
+    elif slug == "create-player-form":
+        form = forms.PlayerForm()
+    elif slug == "create-game-form":
+        form = forms.GameForm()
+    return form
+
+
 def htmx_create_tee(request, pk):
     form = forms.TeeForm()
     return render(request, "home/crispy-form.html", {"form": form, "form_id": "create-tee-form"})
@@ -81,3 +106,8 @@ def htmx_create_course(request):
 def htmx_create_player(request):
     form = forms.PlayerForm()
     return render(request, "home/crispy-form.html", {"form": form, "form_id": "create-player-form"})
+
+
+def htmx_create_form(request, form_slug):
+    form = get_form_by_slug(form_slug)
+    return render(request, "home/crispy-form.html", {"form": form, "form_id": form_slug})

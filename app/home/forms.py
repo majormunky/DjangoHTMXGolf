@@ -62,3 +62,26 @@ class PlayerForm(forms.ModelForm):
             "name",
         ]
         
+
+class GameForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Fieldset(
+                "",
+                "course",
+                "holes_played",
+                "league_game"
+            )
+        )
+
+    class Meta:
+        model = models.Game
+        fields = [
+            "course",
+            "holes_played",
+            "league_game",
+        ]
+
+        
