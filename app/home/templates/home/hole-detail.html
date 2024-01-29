@@ -7,11 +7,20 @@
             <div class="card-header">{{obj.name}}</div>
             <div class="card-body">
                 <p class="card-text">Course: <a href="{% url 'home:golf-course-detail' course.id %}">{{course.name}}</a></p>
+                {% if tee_list %}
+                <ul>
+                    {% for tee in tee_list %}
+                    <li>{{tee.name}}</li>
+                    {% endfor %}
+                </ul>
+                {% else %}
                 <p class="card-text">No Tees Found</p>
+                {% endif %}
             </div>
-            <div class="card-footer"><a href="#" class="btn btn-primary btn-sm">Add Tee</a></div>
+            <div class="card-footer"><button hx-get="{% url 'home:htmx-create-tee' obj.id %}" hx-target="#new-tee-form" class="btn btn-primary btn-sm">Add Tee</button></div>
         </div>
     </div>
-    <div id="new-tee-form"></div>
+    <div class="my-3 col-3" id="new-tee-form" hx-boost="true" hx-post=".">
+    </div>
 </div>
 {% endblock %}

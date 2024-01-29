@@ -40,18 +40,16 @@ def create_golf_course(request):
 def hole_detail(request, pk):
     hole_data = get_object_or_404(models.Hole, pk=pk)
     course_data = hole_data.course
-    return render(request, "home/hole-detail.html", {"obj": hole_data, "course": course_data})
-
-
-def htmx_create_tee(request, pk):
+    tee_list = hole_data.tee_set.all()
     if request.method == "POST":
-        hole = models.Hole.objects.filter(pk=pk).first()
         form = forms.TeeForm(request.POST)
         if form.is_valid():
             tee = form.save(commit=False)
-            tee.hole = hole
+            tee.hole = hole_data
             tee.save()
-            return render(request, "home/hole-detail.html", {"obj": hole, "course": hole.course})
-    else:
-        form = forms.TeeForm()
+    return render(request, "home/hole-detail.html", {"obj": hole_data, "course": course_data, "tee_list": tee_list})
+
+
+def htmx_create_tee(request, pk):
+    form = forms.TeeForm()
     return render(request, "home/crispy-form.html", {"form": form})
