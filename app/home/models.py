@@ -53,6 +53,7 @@ class Game(models.Model):
     status = models.CharField(
         max_length=64, choices=STATUS_CHOICES, default=STATUS_CHOICES[0][0]
     )
+    players = models.ManyToManyField("Player", through="PlayerGameLink")
     league_game = models.BooleanField(default=False)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
@@ -76,3 +77,8 @@ class Player(models.Model):
 
     class Meta:
         unique_together = ["name", "added_by"]
+
+
+class PlayerGameLink(models.Model):
+    player = models.ForeignKey("Player", on_delete=models.CASCADE)
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
