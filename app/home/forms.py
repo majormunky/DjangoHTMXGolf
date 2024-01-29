@@ -4,7 +4,26 @@ from crispy_forms.layout import Layout, Fieldset, Submit
 from . import models
 
 
+class TestGolfCourseForm(forms.ModelForm):        
+    class Meta:
+        model = models.GolfCourse
+        fields = [
+            "name",
+            "hole_count",
+            "tee_time_link",
+            "website_link",
+            "city",
+            "state",
+            "zip_code"
+        ]
+
+
 class GolfCourseForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_id = "create-course-form"
+        
     class Meta:
         model = models.GolfCourse
         fields = [
@@ -23,6 +42,7 @@ class TeeForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_id = "create-tee-form"
+        # self.helper.form_method = "POST"
         self.helper.layout = Layout(
             Fieldset(
                 "",

@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
 
 {% block content %}
 <h1>Golf Courses</h1>
@@ -20,7 +21,27 @@
     </tbody>
 </table>
 {% endif %}
-<a class="btn btn-primary btn-sm" href="{% url 'home:golf-course-create' %}">Create Golf Course</a>
+<button class="btn btn-primary btn-sm" hx-get="{% url 'home:htmx-create-course' %}" hx-target="#new-course-form" data-bs-toggle="modal" data-bs-target="#add-course-modal">Create Golf Course</button>
+
+<div class="modal fade" id="add-course-modal" tabindex="-1" aria-labelledby="add-course-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="add-course-modal-label">New Course</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="new-course-form">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" form="create-course-form">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
-{% block page_scripts %}{% endblock %}
+
+
+{% block page_scripts %}
+{% endblock %}
 {% block page_styles %}{% endblock %}

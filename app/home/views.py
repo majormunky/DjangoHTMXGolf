@@ -9,15 +9,6 @@ def index(request):
 
 def golf_courses(request):
     course_list = models.GolfCourse.objects.all()
-    return render(request, "home/golf-courses.html", {"course_list": course_list})
-
-
-def golf_course_detail(request, pk):
-    course_data = get_object_or_404(models.GolfCourse, pk=pk)
-    return render(request, "home/golf-course-detail.html", {"obj": course_data})
-
-
-def create_golf_course(request):
     if request.method == "POST":
         form = forms.GolfCourseForm(request.POST)
         if form.is_valid():
@@ -30,11 +21,15 @@ def create_golf_course(request):
                     course=course_data
                 )
                 new_hole.save()
-            
-            return redirect("home:golf-courses")
+            return render(request, "home/golf-courses.html", {"course_list": course_list, "form": form})
     else:
         form = forms.GolfCourseForm()
-    return render(request, "home/form.html", {"form": form})
+    return render(request, "home/golf-courses.html", {"course_list": course_list, "form": form})
+
+
+def golf_course_detail(request, pk):
+    course_data = get_object_or_404(models.GolfCourse, pk=pk)
+    return render(request, "home/golf-course-detail.html", {"obj": course_data})
 
 
 def hole_detail(request, pk):
@@ -52,4 +47,10 @@ def hole_detail(request, pk):
 
 def htmx_create_tee(request, pk):
     form = forms.TeeForm()
-    return render(request, "home/crispy-form.html", {"form": form})
+    return render(request, "home/crispy-form.html", {"form": form, "form_id": "create-tee-form"})
+
+
+def htmx_create_course(request):
+   form = forms.GolfCourseForm()
+   return render(request, "home/crispy-form.html", {"form": form, "form_id": "create-course-form"})
+
