@@ -3,8 +3,22 @@
 {% block content %}
 <div class="row">
     <div class="col-6">
-        <h1>Game Detail</h1>
-        <p>Course: {{game_data.course.name}}</p>
+        <div class="card">
+            <div class="card-header">Game Detail</div>
+            <div class="card-body">
+                <p class="card-text">Course: {{game_data.course.name}}</p>
+                <p class="card-text">Status: {{game_data.get_status_display}}</p>
+                {% if game_data.status != "setup" %}
+                <p class="card-text">Date Started: {{game_data.date_started}}</p>
+                {% endif %}
+            </div>
+            <div class="card-footer">
+                {% if game_data.status == "setup" %}
+                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#start-game-confirm-modal">Start Game</button>
+                {% endif %}
+            </div>
+        </div>
+        
     </div>
     <div class="col-6">
         <div class="card">
@@ -45,5 +59,24 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="start-game-confirm-modal" tabindex="-1" aria-labelledby="start-game-confirm-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="start-game-confirm-modal-label">Are you sure?</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to start this game?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" hx-post=".">Start Game</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 {% endblock %}
