@@ -3,23 +3,29 @@
 {% block content %}
 <div class="row">
     <div class="col-12">
-        <h1>Players</h1>
-        {% if player_list %}
-        <table class="table table-striped">
-            <thead></thead>
-            <tbody class="align-middle">
-                {% for player in player_list %}
-                <tr>
-                    <td><a href="{% url 'home:player-detail' player.id %}" class="btn btn-primary btn-sm">View</a></td>
-                    <td>{{player.name}}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        {% else %}
-        <p>No players have been setup</p>
-        {% endif %}
-        <button hx-get="{% url 'home:htmx-create-player' 'create-player-form' %}" hx-target="#new-player-form" data-bs-toggle="modal" data-bs-target="#add-player-modal" class="btn btn-primary btn-sm">Create Player</button>
+        <div class="card">
+            <div class="card-header bg-primary fw-bold text-white">Players</div>
+            <div class="card-body">
+                {% if player_list %}
+                <table class="table table-striped">
+                    <thead></thead>
+                    <tbody class="align-middle">
+                        {% for player in player_list %}
+                        <tr>
+                            <td><a href="{% url 'home:player-detail' player.id %}" class="btn btn-primary btn-sm">View</a></td>
+                            <td>{{player.name}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p>No players have been setup</p>
+                {% endif %}
+            </div>
+            <div class="card-footer">
+                <button hx-get="{% url 'home:htmx-create-player' 'create-player-form' %}" hx-target="#new-player-form" data-bs-toggle="modal" data-bs-target="#add-player-modal" class="btn btn-primary btn-sm">Create Player</button>
+            </div>
+        </div>
     </div>
 </div>
 

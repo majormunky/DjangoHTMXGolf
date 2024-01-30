@@ -4,7 +4,7 @@
 <div class="row">
     <div class="col-6">
         <div class="card">
-            <div class="card-header">Game Detail</div>
+            <div class="card-header bg-primary fw-bold text-white">Game Detail</div>
             <div class="card-body">
                 <p class="card-text">Course: {{game_data.course.name}}</p>
                 <p class="card-text">Status: {{game_data.get_status_display}}</p>
@@ -22,7 +22,7 @@
     </div>
     <div class="col-6">
         <div class="card">
-            <div class="card-header">Players</div>
+            <div class="card-header bg-primary fw-bold text-white">Players</div>
             <div class="card-body">
                 {% if player_links %}
                 <table class="table table-striped">

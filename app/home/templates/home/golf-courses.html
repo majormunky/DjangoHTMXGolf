@@ -1,26 +1,33 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Golf Courses</h1>
-{% if course_list %}
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th style="width: 5%;">&nbsp;</th>
-            <th>Name</th>
-        </tr>
-    </thead>
-    <tbody class="align-middle">
-    {% for course in course_list %}
-    <tr>
-        <td><a href="{% url 'home:golf-course-detail' course.id %}" class="btn btn-primary btn-sm">View</a></td>
-        <td>{{course.name}}</td>
-    </tr>
-    {% endfor %}
-    </tbody>
-</table>
-{% endif %}
-<button class="btn btn-primary btn-sm" hx-get="{% url 'home:htmx-create-course' 'create-course-form' %}" hx-target="#new-course-form" data-bs-toggle="modal" data-bs-target="#add-course-modal">Create Golf Course</button>
+<div class="card">
+    <div class="card-header bg-primary fw-bold text-white">Golf Courses</div>
+    <div class="card-body">
+        
+        {% if course_list %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th style="width: 5%;">&nbsp;</th>
+                    <th>Name</th>
+                </tr>
+            </thead>
+            <tbody class="align-middle">
+                {% for course in course_list %}
+                <tr>
+                    <td><a href="{% url 'home:golf-course-detail' course.id %}" class="btn btn-primary btn-sm">View</a></td>
+                    <td>{{course.name}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+    <div class="card-footer">
+        <button class="btn btn-primary btn-sm" hx-get="{% url 'home:htmx-create-course' 'create-course-form' %}" hx-target="#new-course-form" data-bs-toggle="modal" data-bs-target="#add-course-modal">Create Golf Course</button>
+    </div>
+</div>
 
 <div class="modal fade" id="add-course-modal" tabindex="-1" aria-labelledby="add-course-modal-label" aria-hidden="true">
     <div class="modal-dialog">
@@ -39,7 +46,6 @@
     </div>
 </div>
 {% endblock %}
-
 
 {% block page_scripts %}
 {% endblock %}
