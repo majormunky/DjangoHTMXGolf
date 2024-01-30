@@ -12,11 +12,15 @@
                 <p class="card-text">Date Started: {{game_data.date_started}}</p>
                 {% endif %}
             </div>
+            {% if game_data.status == "setup" %}
             <div class="card-footer">
-                {% if game_data.status == "setup" %}
                 <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#start-game-confirm-modal">Start Game</button>
-                {% endif %}
             </div>
+            {% elif game_data.status == "active" %}
+            <div class="card-footer">
+                <a class="btn btn-primary btn-sm" href="{% url 'home:play-game' game_data.id first_hole.id %}">Score Game</a>
+            </div>
+            {% endif %}
         </div>
         
     </div>
@@ -26,35 +30,14 @@
             <div class="card-body" id="game-player-list">
                 {% include "home/game-player-table.html" %}
             </div>
+            {% if game_data.status == "setup" %}
             <div class="card-footer">
                 <button hx-get="{% url 'home:htmx-create-player-form' game_data.id %}" hx-target="#add-player-form" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#add-player-modal">Add Player</button>
             </div>
+            {% endif %}
         </div>
     </div>
 </div>
-{% if game_data.status == "active" %}
-<div class="row mt-3">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header bg-primary fw-bold text-white">Hole 1</div>
-            <div class="card-body">
-                <table class="table table-striped">
-                    <tbody class="align-middle">
-                        <tr>
-                            <td>Josh Bright</td>
-                            <td><input type="text" class="form-control" value="0"></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="card-footer d-flex justify-content-between">
-                <button class="btn btn-primary btn-sm">Prev Hole</button>
-                <button class="btn btn-primary btn-sm">Next Hole</button>
-            </div>
-        </div>
-    </div>
-</div>
-{% endif %}
 
 <div class="modal fade" id="add-player-modal" tabindex="-1" aria-labelledby="add-player-modal-label" aria-hidden="true">
     <div class="modal-dialog">
