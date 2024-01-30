@@ -38,13 +38,26 @@ def hole_detail(request, pk):
     hole_data = get_object_or_404(models.Hole, pk=pk)
     course_data = hole_data.course
     tee_list = hole_data.tee_set.all()
+    hole_form = forms.HoleParForm(instance=hole_data)
     if request.method == "POST":
         form = forms.TeeForm(request.POST)
         if form.is_valid():
             tee = form.save(commit=False)
             tee.hole = hole_data
             tee.save()
-    return render(request, "home/hole-detail.html", {"obj": hole_data, "course": course_data, "tee_list": tee_list})
+    return render(request, "home/hole-detail.html", {"obj": hole_data, "course": course_data, "tee_list": tee_list, "par_form": hole_form})
+
+
+@login_required
+def update_par_for_hole(request, pk):
+    hole_data = get_object_or_404(models.Hole, pk=pk)
+    if request.method == "POST":
+        form = forms.HoleParForm(request.POST)
+        if form.is_valid():
+            new_par_value = form.cleaned_data["par"]
+            hole_data.par = new_par_value
+            hole_data.save()
+    return render(request, "home/par-info.html", {"obj": hole_data})
 
 
 @login_required
@@ -105,8 +118,6 @@ def remove_player_from_game(request, player_pk, game_pk):
     player_links = models.PlayerGameLink.objects.filter(game=game_data)
 
     return render(request, "home/game-player-table.html", {"game_data": game_data, "player_links": player_links})
-
-    
 
 
 @login_required

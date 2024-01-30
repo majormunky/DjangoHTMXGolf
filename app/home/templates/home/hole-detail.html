@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
 
 {% block content %}
 <div class="row">
@@ -7,6 +8,7 @@
             <div class="card-header bg-primary fw-bold text-white">{{obj.name}}</div>
             <div class="card-body">
                 <p class="card-text">Course: <a href="{% url 'home:golf-course-detail' course.id %}">{{course.name}}</a></p>
+                {% include "home/par-info.html" %}
                 <hr>
                 <h3>Tees</h3>
                 {% if tee_list %}
@@ -35,22 +37,59 @@
             </div>
         </div>
     </div>
+</div>
 
-    <div class="modal fade" id="add-tee-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">New Tee</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" id="new-tee-form">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" form="create-tee-form">Save changes</button>
-                </div>
+<div class="modal fade" id="add-tee-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">New Tee</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="new-tee-form">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" form="create-tee-form">Save changes</button>
             </div>
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="update-par-modal" tabindex="-1" aria-labelledby="update-par-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="update-par-modal-label">Update Par</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="update-par-value-form" hx-post="{% url 'home:update-par-for-hole' obj.id %}" hx-target="#par-info">
+                    {{ par_form|crispy }}
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" form="update-par-value-form" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block page_scripts %}
+<script>
+ const modal = new bootstrap.Modal(document.getElementById("update-par-modal"))
+ 
+ document.body.addEventListener('htmx:configRequest', (event) => {
+     event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+ });
+
+ htmx.on("htmx:beforeSwap", (e) => {
+     // Response targeting #par-info => hide the modal
+     if (e.detail.target.id == "par-info") {
+         modal.hide()
+     }
+ });
+</script>
 {% endblock %}
