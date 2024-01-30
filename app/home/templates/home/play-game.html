@@ -12,7 +12,7 @@
                     {% for hole in hole_scores %}
                     <tr>
                         <td>{{hole.game_link.player.name}}</td>
-                        <td><input type="text" value="{{hole.score}}" size="1"></td>
+                        <td><input type="text" value="{{hole.score}}" name="score" size="1" hx-post="{% url 'home:score-hole' hole.id hole.game_link.id %}"></td>
                     </tr>
                     {% endfor %}
                 </table>
@@ -33,4 +33,12 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block page_scripts %}
+<script>
+ document.body.addEventListener('htmx:configRequest', (event) => {
+     event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+ });
+</script>
 {% endblock %}

@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from . import models
 from . import forms
 from . import utils
@@ -155,6 +156,22 @@ def play_game(request, game_pk, hole_pk):
             "next_hole": next_hole,
         },
     )
+
+
+@login_required
+def score_hole(request, hole_pk, link_pk):
+    if request.method == "POST":
+        hole_data = models.Hole.objects.filter(pk=hole_pk).first()
+        player_link = models.PlayerGameLink.objects.filter(pk=link_pk).first()
+        
+        score = request.POST.get("score")
+        print("Score: ", score)
+        hole_score = models.HoleScore.objects.filter(hole=hole_data, game_link=player_link).first()
+        hole_score.score = int(score)
+        hole_score.save()
+
+        print(hole_score)
+        return HttpResponse("success")
 
 
 @login_required
