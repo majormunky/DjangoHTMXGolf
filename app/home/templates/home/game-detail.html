@@ -32,6 +32,29 @@
         </div>
     </div>
 </div>
+{% if game_data.status == "active" %}
+<div class="row mt-3">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-primary fw-bold text-white">Hole 1</div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <tbody class="align-middle">
+                        <tr>
+                            <td>Josh Bright</td>
+                            <td><input type="text" class="form-control" value="0"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer d-flex justify-content-between">
+                <button class="btn btn-primary btn-sm">Prev Hole</button>
+                <button class="btn btn-primary btn-sm">Next Hole</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
 
 <div class="modal fade" id="add-player-modal" tabindex="-1" aria-labelledby="add-player-modal-label" aria-hidden="true">
     <div class="modal-dialog">
