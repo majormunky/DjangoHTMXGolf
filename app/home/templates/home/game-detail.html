@@ -23,18 +23,8 @@
     <div class="col-6">
         <div class="card">
             <div class="card-header bg-primary fw-bold text-white">Players</div>
-            <div class="card-body">
-                {% if player_links %}
-                <table class="table table-striped">
-                    {% for link in player_links %}
-                    <tr>
-                        <td>{{link.player.name}}</td>
-                    </tr>
-                    {% endfor %}
-                </table>
-                {% else %}
-                <p class="card-text">No players found</p>
-                {% endif %}
+            <div class="card-body" id="game-player-list">
+                {% include "home/game-player-table.html" %}
             </div>
             <div class="card-footer">
                 <button hx-get="{% url 'home:htmx-create-player-form' game_data.id %}" hx-target="#add-player-form" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#add-player-modal">Add Player</button>
@@ -78,5 +68,12 @@
     </div>
 </div>
 
+{% endblock %}
 
+{% block page_scripts %}
+<script>
+ document.body.addEventListener('htmx:configRequest', (event) => {
+     event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+ });
+</script>
 {% endblock %}

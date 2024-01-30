@@ -1,0 +1,22 @@
+{% if player_links %}
+<table class="table table-striped">
+    <thead>
+        {% if game_data.status == "setup" %}
+        <th style="width: 5%;">&nbsp;</th>
+        {% endif %}
+        <th>Name</th>
+    </thead>
+    <tbody class="align-middle">
+        {% for link in player_links %}
+        <tr>
+            {% if game_data.status == "setup" %}
+            <td><button hx-post="{% url 'home:remove-player-from-game' game_data.id link.player.id %}" hx-target="#game-player-list" class="btn btn-primary btn-sm">Remove</button></td>
+            {% endif %}
+            <td>{{link.player.name}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="card-text">No players found</p>
+{% endif %}

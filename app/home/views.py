@@ -95,6 +95,21 @@ def game_detail(request, pk):
 
 
 @login_required
+def remove_player_from_game(request, player_pk, game_pk):
+    player_data = models.Player.objects.filter(pk=player_pk).first()
+    game_data = models.Game.objects.filter(pk=game_pk).first()
+    game_link = models.PlayerGameLink.objects.filter(game=game_data, player=player_data).first()
+
+    game_link.delete()
+
+    player_links = models.PlayerGameLink.objects.filter(game=game_data)
+
+    return render(request, "home/game-player-table.html", {"game_data": game_data, "player_links": player_links})
+
+    
+
+
+@login_required
 def htmx_create_players_form(request, pk):
     game_data = get_object_or_404(models.Game, pk=pk)
     existing_player_links = models.PlayerGameLink.objects.filter(game=game_data)
