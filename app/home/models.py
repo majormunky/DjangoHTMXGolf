@@ -82,3 +82,10 @@ class Player(models.Model):
 class PlayerGameLink(models.Model):
     player = models.ForeignKey("Player", on_delete=models.CASCADE)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
+
+
+class HoleScore(models.Model):
+    hole = models.ForeignKey(Hole, on_delete=models.CASCADE)
+    current_par = models.IntegerField(default=0)
+    score = models.IntegerField(default=0)
+    game_link = models.ForeignKey(PlayerGameLink, on_delete=models.CASCADE)
