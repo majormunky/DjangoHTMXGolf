@@ -68,7 +68,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary" hx-post=".">Start Game</button>
+                <button type="submit" class="btn btn-primary" hx-post="{% url 'home:start-game' game_data.id %}">Start Game</button>
             </div>
         </div>
     </div>

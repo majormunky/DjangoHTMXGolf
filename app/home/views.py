@@ -133,6 +133,14 @@ def game_detail(request, pk):
 
 
 @login_required
+def start_game(request, pk):
+    game_data = get_object_or_404(models.Game, pk=pk)
+    game_data.start()
+    utils.setup_scores_for_game(game_data)
+    return HttpResponse("success")
+
+
+@login_required
 def play_game(request, game_pk, hole_pk):
     game_data = get_object_or_404(models.Game, pk=game_pk)
     hole_data = get_object_or_404(models.Hole, pk=hole_pk)
@@ -161,16 +169,11 @@ def play_game(request, game_pk, hole_pk):
 @login_required
 def score_hole(request, hole_pk, link_pk):
     if request.method == "POST":
-        hole_data = models.Hole.objects.filter(pk=hole_pk).first()
-        player_link = models.PlayerGameLink.objects.filter(pk=link_pk).first()
-        
+        hole_score_data = models.HoleScore.objects.filter(pk=hole_pk).first()        
         score = request.POST.get("score")
-        print("Score: ", score)
-        hole_score = models.HoleScore.objects.filter(hole=hole_data, game_link=player_link).first()
-        hole_score.score = int(score)
-        hole_score.save()
+        hole_score_data.score = int(score)
+        hole_score_data.save()
 
-        print(hole_score)
         return HttpResponse("success")
 
 
