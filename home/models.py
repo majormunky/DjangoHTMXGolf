@@ -61,6 +61,11 @@ class Game(models.Model):
         self.date_played = timezone.now()
         self.save()
 
+    def get_holes_played(self):
+        if self.holes_played in ["9", "18"]:
+            return self.holes_played
+        return self.holes_played.replace("-", " ").title()
+        
 
 class Player(models.Model):
     name = models.CharField(max_length=64)
