@@ -9,6 +9,7 @@ urlpatterns = [
     path("golf-courses/", views.golf_courses, name="golf-courses"),
     path("golf-courses/<int:pk>/", views.golf_course_detail, name="golf-course-detail"),
     path("golf-courses/create-course/<slug:form_slug>/", views.htmx_create_form, name="htmx-create-course"),
+    path("golf-courses/edit-course/<int:pk>/", views.htmx_edit_course_form, name="htmx-edit-course"),
     path("hole/<int:pk>/", views.hole_detail, name="hole-detail"),
     path("hole/create-tee/<slug:form_slug>/", views.htmx_create_form, name="htmx-create-tee"),
     path("hole/<int:pk>/update-par/", views.update_par_for_hole, name="update-par-for-hole"),

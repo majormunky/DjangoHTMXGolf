@@ -11,6 +11,7 @@
                 <tr>
                     <th style="width: 5%;">&nbsp;</th>
                     <th>Name</th>
+                    <th>Location</th>
                 </tr>
             </thead>
             <tbody class="align-middle">
@@ -18,6 +19,11 @@
                 <tr>
                     <td><a href="{% url 'home:golf-course-detail' course.id %}" class="btn btn-primary btn-sm">View</a></td>
                     <td>{{course.name}}</td>
+                    {% if course.city and course.state and course.zip_code %}
+                    <td>{{course.city}}, {{course.state}} {{course.zip_code}}</td>
+                    {% else %}
+                    <td>Not Set</td>
+                    {% endif %}                    
                 </tr>
                 {% endfor %}
             </tbody>

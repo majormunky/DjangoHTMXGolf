@@ -5,8 +5,14 @@
     <div class="col-6">
         <div class="card">
             <div class="card-header bg-primary fw-bold text-white">{{obj.name}}</div>
-            <div class="card-body"></div>
-            <div class="card-footer"></div>
+            <div class="card-body" id="course-detail-panel">
+                {% include "home/fragments/course-detail-panel.html" %}
+            </div>
+            {% if request.user.is_authenticated %}
+            <div class="card-footer">
+                <button hx-get="{% url 'home:htmx-edit-course' obj.id %}" hx-target="#course-detail-panel" class="btn btn-primary btn-sm">Edit</button>
+            </div>
+            {% endif %}
         </div>
     </div>
     <div class="col-6">
@@ -34,7 +40,6 @@
                 </table>
                 {% endif %}
             </div>
-            <div class="card-footer"></div>
         </div>
     </div>
 </div>

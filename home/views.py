@@ -36,6 +36,10 @@ def golf_courses(request):
 
 def golf_course_detail(request, pk):
     course_data = get_object_or_404(models.GolfCourse, pk=pk)
+    if request.method == "POST":
+        form = forms.GolfCourseForm(request.POST, instance=course_data)
+        if form.is_valid():
+            form.save()
     return render(request, "home/golf-course-detail.html", {"obj": course_data})
 
 
@@ -169,7 +173,7 @@ def play_game(request, game_pk, hole_pk):
 @login_required
 def score_hole(request, hole_pk, link_pk):
     if request.method == "POST":
-        hole_score_data = models.HoleScore.objects.filter(pk=hole_pk).first()        
+        hole_score_data = models.HoleScore.objects.filter(pk=hole_pk).first()
         score = request.POST.get("score")
         hole_score_data.score = int(score)
         hole_score_data.save()
@@ -220,4 +224,15 @@ def htmx_create_form(request, form_slug):
     form = utils.get_form_by_slug(form_slug)
     return render(
         request, "home/crispy-form.html", {"form": form, "form_id": form_slug}
+    )
+
+
+@login_required
+def htmx_edit_course_form(request, pk):
+    course_data = get_object_or_404(models.GolfCourse, pk=pk)
+    form = forms.GolfCourseForm(instance=course_data)
+    return render(
+        request,
+        "home/crispy-form.html",
+        {"form": form, "form_id": "edit-course-form", "submit_button": True},
     )
