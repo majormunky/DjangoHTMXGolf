@@ -61,7 +61,25 @@ class PlayerForm(forms.ModelForm):
         fields = [
             "name",
         ]
-        
+
+
+class GameFormCourseOnly(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Fieldset(
+                "",
+                "course",
+            )
+        )
+
+    class Meta:
+        model = models.Game
+        fields = [
+            "course",
+        ]
+
 
 class GameForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -84,6 +102,64 @@ class GameForm(forms.ModelForm):
             "league_game",
         ]
 
+
+class GameFormNineHole(forms.ModelForm):
+    HOLE_CHOICES = (("9", "9 Holes"),)
+    holes = forms.ChoiceField(choices=HOLE_CHOICES)
+    selected_course = forms.CharField(widget = forms.HiddenInput(), required = False)
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Fieldset(
+                "",
+                "course",
+                "holes",
+                "league_game",
+                "selected_course"
+            )
+        )
+
+    class Meta:
+        model = models.Game
+        fields = [
+            "course",
+            "league_game",
+        ]
+
+
+
+class GameFormEighteenHole(forms.ModelForm):
+    HOLE_CHOICES = (
+        ("front-9", "Front 9"),
+        ("back-9", "Back 9"),
+        ("18", "18 Holes"),
+    )
+    holes = forms.ChoiceField(choices=HOLE_CHOICES)
+    selected_course = forms.CharField(widget = forms.HiddenInput(), required = False)
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Fieldset(
+                "",
+                "course",
+                "holes",
+                "league_game"
+                "selected_course",
+            )
+        )
+
+    class Meta:
+        model = models.Game
+        fields = [
+            "course",
+            "league_game",
+        ]
+
+        
 
 class PlayerGameLinkForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):

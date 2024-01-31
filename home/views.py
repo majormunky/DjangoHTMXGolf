@@ -103,13 +103,25 @@ def player_detail(request, pk):
 @login_required
 def games(request):
     game_list = models.Game.objects.filter(created_by=request.user)
+    form = forms.GameForm()
     if request.method == "POST":
-        form = forms.GameForm(request.POST)
-        if form.is_valid():
-            game = form.save(commit=False)
-            game.created_by = request.user
-            game.save()
-    return render(request, "home/games.html", {"game_list": game_list})
+        selected_course = request.POST.get("selected_course", None)
+        holes = request.POST.get("holes", None)
+        league_game = request.POST.get("league_game", False)
+        if league_game == "on":
+            league_game = True
+
+        if all([selected_course, holes]):
+            course_data = models.GolfCourse.objects.filter(pk=selected_course).first()
+            new_game = models.Game.objects.create(
+                course=course_data,
+                holes_played=holes,
+                league_game=league_game,
+                created_by=request.user
+            )
+    else:
+        form = forms.GameFormCourseOnly()
+    return render(request, "home/games.html", {"game_list": game_list, "form": form})
 
 
 @login_required
@@ -218,6 +230,22 @@ def htmx_create_players_form(request, pk):
         "home/crispy-form.html",
         {"form": form, "form_id": "add-player-to-game-form"},
     )
+
+
+@login_required
+def htmx_create_game_form(request):
+    selected_course = request.GET.get("course", None)
+    if selected_course:
+        course_data = get_object_or_404(models.GolfCourse, pk=selected_course)
+        if course_data.hole_count == "9":
+            form = forms.GameFormNineHole(initial={"course": course_data, "selected_course": selected_course})
+        else:
+            form = forms.GameFormEighteenHole(initial={"course": course_data, "selected_course": selected_course})
+        form.fields["course"].disabled = True
+    else:
+        form = forms.GameFormCourseOnly()
+    return render(request, "home/crispy-form.html", {"form": form, "form_id": "game-form"})
+        
 
 
 def htmx_create_form(request, form_slug):

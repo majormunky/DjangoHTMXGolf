@@ -1,6 +1,6 @@
 {% load crispy_forms_tags %}
 
-<form method="POST" hx-boost="true" action="." method="post" id="{{form_id}}">
+<form method="POST" hx-boost="true" action="." id="{{form_id}}">
     {% csrf_token %}
     {{ form|crispy }}
     {% if submit_button %}
