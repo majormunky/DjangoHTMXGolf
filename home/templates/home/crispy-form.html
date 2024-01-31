@@ -3,4 +3,7 @@
 <form method="POST" hx-boost="true" action="." method="post" id="{{form_id}}">
     {% csrf_token %}
     {{ form|crispy }}
+    {% if submit_button %}
+    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+    {% endif %}
 </form>
