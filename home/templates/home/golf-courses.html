@@ -24,9 +24,11 @@
         </table>
         {% endif %}
     </div>
+    {% if request.user.is_authenticated %}
     <div class="card-footer">
         <button class="btn btn-primary btn-sm" hx-get="{% url 'home:htmx-create-course' 'create-course-form' %}" hx-target="#new-course-form" data-bs-toggle="modal" data-bs-target="#add-course-modal">Create Golf Course</button>
     </div>
+    {% endif %}
 </div>
 
 <div class="modal fade" id="add-course-modal" tabindex="-1" aria-labelledby="add-course-modal-label" aria-hidden="true">

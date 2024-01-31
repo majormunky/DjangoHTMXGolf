@@ -1,1 +1,5 @@
-<p class="card-text" id="par-info">Par: {{obj.par}} <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#update-par-modal">Change Par</button></p>
+<p class="card-text" id="par-info">Par: {{obj.par}}
+    {% if request.user.is_authenticated %}
+    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#update-par-modal">Change Par</button>
+    {% endif %}
+</p>

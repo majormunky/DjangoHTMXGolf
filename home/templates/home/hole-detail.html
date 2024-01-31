@@ -32,9 +32,11 @@
                 <p class="card-text">No Tees Found</p>
                 {% endif %}
             </div>
+            {% if request.user.is_authenticated %}
             <div class="card-footer">
                 <button hx-get="{% url 'home:htmx-create-tee' 'create-tee-form' %}" hx-target="#new-tee-form" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#add-tee-modal">Add Tee</button>
             </div>
+            {% endif %}
         </div>
     </div>
 </div>
