@@ -48,9 +48,7 @@ class Game(models.Model):
 
     date_played = models.DateTimeField(blank=True, null=True)
     course = models.ForeignKey(GolfCourse, on_delete=models.CASCADE)
-    holes_played = models.CharField(
-        max_length=64, choices=HOLE_CHOICES, default=HOLE_CHOICES[0][0]
-    )
+    holes_played = models.CharField(max_length=64)
     status = models.CharField(
         max_length=64, choices=STATUS_CHOICES, default=STATUS_CHOICES[0][0]
     )
