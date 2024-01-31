@@ -8,6 +8,7 @@
             <div class="card-body">
                 <p class="card-text">Course: {{game_data.course.name}}</p>
                 <p class="card-text">Status: {{game_data.get_status_display}}</p>
+                <p class="card-text">Holes: {{game_data.get_holes_played}}</p>
                 {% if game_data.status != "setup" %}
                 <p class="card-text">Date Started: {{game_data.date_started}}</p>
                 {% endif %}
@@ -18,7 +19,7 @@
             </div>
             {% elif game_data.status == "active" %}
             <div class="card-footer">
-                <a class="btn btn-primary btn-sm" href="{% url 'home:play-game' game_data.id first_hole.id %}">Score Game</a>
+                <a class="btn btn-primary btn-sm" href="{% url 'home:play-game' game_data.id first_hole_score.id %}">Score Game</a>
             </div>
             {% endif %}
         </div>

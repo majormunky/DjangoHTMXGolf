@@ -112,7 +112,7 @@ def games(request):
                 course=course_data,
                 holes_played=holes,
                 league_game=league_game,
-                created_by=request.user
+                created_by=request.user,
             )
     else:
         form = forms.GameFormCourseOnly()
@@ -123,8 +123,10 @@ def games(request):
 def game_detail(request, pk):
     game_data = get_object_or_404(models.Game, pk=pk)
     player_links = models.PlayerGameLink.objects.filter(game=game_data)
-    first_hole = (
-        models.Hole.objects.filter(course=game_data.course).order_by("order").first()
+    first_hole_score = (
+        models.HoleScore.objects.filter(hole__course=game_data.course)
+        .order_by("hole__order")
+        .first()
     )
     if request.method == "POST":
         form = forms.PlayerGameLinkForm(request.POST)
@@ -138,7 +140,7 @@ def game_detail(request, pk):
         {
             "game_data": game_data,
             "player_links": player_links,
-            "first_hole": first_hole,
+            "first_hole_score": first_hole_score,
         },
     )
 
@@ -152,15 +154,16 @@ def start_game(request, pk):
 
 
 @login_required
-def play_game(request, game_pk, hole_pk):
+def play_game(request, game_pk, hole_score_pk):
+    hole_score_data = get_object_or_404(models.HoleScore, pk=hole_score_pk)
     game_data = get_object_or_404(models.Game, pk=game_pk)
-    hole_data = get_object_or_404(models.Hole, pk=hole_pk)
+    hole_data = hole_score_data.hole
 
-    prev_hole = models.Hole.objects.filter(
-        course=game_data.course, order=hole_data.order - 1
+    prev_hole_score = models.HoleScore.objects.filter(
+        hole__course=game_data.course, hole__order=hole_data.order - 1, game_link__game=game_data
     ).first()
-    next_hole = models.Hole.objects.filter(
-        course=game_data.course, order=hole_data.order + 1
+    next_hole_score = models.HoleScore.objects.filter(
+        hole__course=game_data.course, hole__order=hole_data.order + 1, game_link__game=game_data
     ).first()
 
     hole_scores = models.HoleScore.objects.filter(hole=hole_data)
@@ -171,8 +174,8 @@ def play_game(request, game_pk, hole_pk):
             "game_data": game_data,
             "hole_data": hole_data,
             "hole_scores": hole_scores,
-            "prev_hole": prev_hole,
-            "next_hole": next_hole,
+            "prev_hole_score": prev_hole_score,
+            "next_hole_score": next_hole_score,
         },
     )
 
@@ -233,14 +236,19 @@ def htmx_create_game_form(request):
     if selected_course:
         course_data = get_object_or_404(models.GolfCourse, pk=selected_course)
         if course_data.hole_count == "9":
-            form = forms.GameFormNineHole(initial={"course": course_data, "selected_course": selected_course})
+            form = forms.GameFormNineHole(
+                initial={"course": course_data, "selected_course": selected_course}
+            )
         else:
-            form = forms.GameFormEighteenHole(initial={"course": course_data, "selected_course": selected_course})
+            form = forms.GameFormEighteenHole(
+                initial={"course": course_data, "selected_course": selected_course}
+            )
         form.fields["course"].disabled = True
     else:
         form = forms.GameFormCourseOnly()
-    return render(request, "home/crispy-form.html", {"form": form, "form_id": "game-form"})
-        
+    return render(
+        request, "home/crispy-form.html", {"form": form, "form_id": "game-form"}
+    )
 
 
 def htmx_create_form(request, form_slug):

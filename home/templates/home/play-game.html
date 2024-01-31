@@ -18,14 +18,14 @@
                 </table>
             </div>
             <div class="card-footer d-flex justify-content-between">
-                {% if prev_hole %}
-                <a href="{% url 'home:play-game' game_data.id prev_hole.id %}" class="btn btn-primary btn-sm">Prev Hole</a>
+                {% if prev_hole_score %}
+                <a href="{% url 'home:play-game' game_data.id prev_hole_score.id %}" class="btn btn-primary btn-sm">Prev Hole</a>
                 {% else %}
                 <button class="btn btn-primary btn-sm disabled">Prev Hole</button>
                 {% endif %}
 
-                {% if next_hole %}
-                <a href="{% url 'home:play-game' game_data.id next_hole.id %}" class="btn btn-primary btn-sm">Next Hole</a>
+                {% if next_hole_score %}
+                <a href="{% url 'home:play-game' game_data.id next_hole_score.id %}" class="btn btn-primary btn-sm">Next Hole</a>
                 {% else %}
                 <button class="btn btn-primary btn-sm disabled">Next Hole</button>
                 {% endif %}  
