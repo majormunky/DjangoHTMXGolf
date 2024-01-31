@@ -1,0 +1,13 @@
+<p class="card-text">Tee Time Link:
+    {% if obj.tee_time_link %}
+    <a href="{{obj.tee_time_link}}">Link</a>
+    {% endif %}
+</p>
+<p class="card-text">Website Link:
+    {% if obj.website_link %}
+    <a href="{{obj.website_link}}">Link</a>
+    {% endif %}
+</p>
+<p class="card-text">City: {{obj.city}}</p>
+<p class="card-text">State: {{obj.state}}</p>
+<p class="card-text">Zip Code: {{obj.zip_code}}</p>
