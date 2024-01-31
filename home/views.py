@@ -16,12 +16,7 @@ def golf_courses(request):
         form = forms.GolfCourseForm(request.POST)
         if form.is_valid():
             course_data = form.save()
-            hole_count = int(course_data.hole_count)
-            for hole in range(hole_count):
-                new_hole = models.Hole(
-                    name=f"Hole: {hole + 1}", order=hole, course=course_data
-                )
-                new_hole.save()
+            utils.create_holes_for_course(course_data)
             return render(
                 request,
                 "home/golf-courses.html",
