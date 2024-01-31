@@ -14,6 +14,7 @@
                             <th style="width: 5%;">&nbsp;</th>
                             <th>Course</th>
                             <th>Status</th>
+                            <th>Holes</th>
                         </tr>
                     </thead>
                     <tbody class="align-middle">
@@ -22,6 +23,7 @@
                             <td><a href="{% url 'home:game-detail' game.id %}" class="btn btn-primary btn-sm">View</a></td>
                             <td>{{game.course.name}}</td>
                             <td>{{game.get_status_display}}</td>
+                            <td>{{game.get_holes_played}}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
