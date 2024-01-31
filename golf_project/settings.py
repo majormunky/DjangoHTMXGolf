@@ -29,7 +29,7 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DJANGO_DEBUG") == "True"
 
-ALLOWED_HOSTS = ["oyster-app-4jsrm.ondigitalocean.app", "golf.joshbright.com", "127.0.0.1"]
+ALLOWED_HOSTS = ["*", "golf.joshbright.com", "127.0.0.1"]
 
 
 # Application definition
