@@ -11,26 +11,28 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
+                            <th style="width: 5%;">&nbsp;</th>
                             <th>Course</th>
                             <th>Date Played</th>
                             <th>Status</th>
                             <th>League</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="align-middle">
                     {% for game_link in game_link_list %}
-                    <tr>
-                        <td>{{game_link.game.course.name}}</td>
-                        <td>{{game_link.game.date_played}}</td>
-                        <td>{{game_link.game.get_status_display}}</td>
-                        <td>
-                            {% if game_link.game.league_game %}
-                            <i class="bi-check-circle"></i>
-                            {% else %}
-                            <i class="bi-x-circle"></i>
-                            {% endif %}
-                        </td>
-                    </tr>
+                        <tr>
+                            <td><a href="{% url 'home:game-detail' game_link.game.id %}" class="btn btn-primary btn-sm">View</a></td>
+                            <td>{{game_link.game.course.name}}</td>
+                            <td>{{game_link.game.date_played}}</td>
+                            <td>{{game_link.game.get_status_display}}</td>
+                            <td>
+                                {% if game_link.game.league_game %}
+                                <i class="bi-check-circle"></i>
+                                {% else %}
+                                <i class="bi-x-circle"></i>
+                                {% endif %}
+                            </td>
+                        </tr>
                     {% endfor %}
                     </tbody>
                 </table>

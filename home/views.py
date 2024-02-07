@@ -99,7 +99,11 @@ def players(request):
 @login_required
 def player_detail(request, pk):
     player_data = get_object_or_404(models.Player, pk=pk)
-    game_links = models.PlayerGameLink.objects.filter(player=player_data)
+    game_links = (
+        models.PlayerGameLink.objects.filter(player=player_data)
+        .select_related("player", "game", "game__course")
+        .order_by("-game__date_played")
+    )
     return render(
         request,
         "home/player-detail.html",
