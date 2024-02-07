@@ -4,6 +4,42 @@
 <div class="row">
     <div class="col-12">
         <h1>Player Detail: {{player_data.name}}</h1>
+        {% if game_link_list %}
+        <div class="card">
+            <div class="card-header bg-primary text-white fw-bold">Game List</div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Course</th>
+                            <th>Date Played</th>
+                            <th>Status</th>
+                            <th>League</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for game_link in game_link_list %}
+                    <tr>
+                        <td>{{game_link.game.course.name}}</td>
+                        <td>{{game_link.game.date_played}}</td>
+                        <td>{{game_link.game.get_status_display}}</td>
+                        <td>
+                            {% if game_link.game.league_game %}
+                            <i class="bi-check-circle"></i>
+                            {% else %}
+                            <i class="bi-x-circle"></i>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer"></div>
+        </div>
+        {% else %}
+        <p>No games found for player</p>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

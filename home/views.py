@@ -11,7 +11,7 @@ def index(request):
 
 
 def about(request):
-    return render(request, "home/about.html", {});
+    return render(request, "home/about.html", {})
 
 
 def golf_courses(request):
@@ -39,7 +39,9 @@ def golf_course_detail(request, pk):
         form = forms.GolfCourseForm(request.POST, instance=course_data)
         if form.is_valid():
             form.save()
-            return render(request, "home/fragments/course-detail-panel.html", {"obj": course_data})
+            return render(
+                request, "home/fragments/course-detail-panel.html", {"obj": course_data}
+            )
     return render(request, "home/golf-course-detail.html", {"obj": course_data})
 
 
@@ -97,7 +99,12 @@ def players(request):
 @login_required
 def player_detail(request, pk):
     player_data = get_object_or_404(models.Player, pk=pk)
-    return render(request, "home/player-detail.html", {"player_data": player_data})
+    game_links = models.PlayerGameLink.objects.filter(player=player_data)
+    return render(
+        request,
+        "home/player-detail.html",
+        {"player_data": player_data, "game_link_list": game_links},
+    )
 
 
 @login_required
@@ -165,10 +172,14 @@ def play_game(request, game_pk, hole_score_pk):
     hole_data = hole_score_data.hole
 
     prev_hole_score = models.HoleScore.objects.filter(
-        hole__course=game_data.course, hole__order=hole_data.order - 1, game_link__game=game_data
+        hole__course=game_data.course,
+        hole__order=hole_data.order - 1,
+        game_link__game=game_data,
     ).first()
     next_hole_score = models.HoleScore.objects.filter(
-        hole__course=game_data.course, hole__order=hole_data.order + 1, game_link__game=game_data
+        hole__course=game_data.course,
+        hole__order=hole_data.order + 1,
+        game_link__game=game_data,
     ).first()
 
     hole_scores = models.HoleScore.objects.filter(hole=hole_data)
@@ -287,4 +298,6 @@ def htmx_course_detail_panel(request, pk):
 @login_required
 def htmx_create_tee_form(request, course_pk, hole_pk):
     form = utils.get_form_by_slug("create-tee-form")
-    return render(request, "home/crispy-form.html", {"form": form, "form_id": "create-tee-form"})
+    return render(
+        request, "home/crispy-form.html", {"form": form, "form_id": "create-tee-form"}
+    )
