@@ -10,6 +10,6 @@
     </div>
     <div class="card-footer">
         <button type="submit" class="btn btn-primary btn-sm" form="edit-course-form">Submit</button>
-        <button type="button" class="btn btn-secondary btn-sm" >Cancel</button>
+        <button type="button" class="btn btn-secondary btn-sm" hx-get="{% url 'home:htmx-course-detail-panel' obj.id %}" hx-target="#course-detail-card-wrapper">Cancel</button>
     </div>
 </div>
