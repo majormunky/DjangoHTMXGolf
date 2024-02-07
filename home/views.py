@@ -265,9 +265,10 @@ def htmx_create_form(request, form_slug):
 @login_required
 def htmx_edit_course_form(request, pk):
     course_data = get_object_or_404(models.GolfCourse, pk=pk)
+    print(course_data)
     form = forms.GolfCourseForm(instance=course_data)
     return render(
         request,
-        "home/crispy-form.html",
-        {"form": form, "form_id": "edit-course-form", "submit_button": True},
+        "home/fragments/edit-course-form.html",
+        {"form": form, "obj": course_data},
     )
