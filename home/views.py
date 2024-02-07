@@ -10,6 +10,10 @@ def index(request):
     return render(request, "home/index.html", {})
 
 
+def about(request):
+    return render(request, "home/about.html", {});
+
+
 def golf_courses(request):
     course_list = models.GolfCourse.objects.all()
     if request.method == "POST":

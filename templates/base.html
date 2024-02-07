@@ -160,7 +160,7 @@
                     <li><a href="{% url 'home:players' %}" class="nav-link px-2 {% if '/players/' in request.path %}link-secondary{% endif %}">Players</a></li>
                     <li><a href="{% url 'home:games' %}" class="nav-link px-2 {% if '/games/' in request.path %}link-secondary{% endif %}">Games</a></li>
                     {% endif %}
-                    <li><a href="#" class="nav-link px-2">About</a></li>
+                    <li><a href="{% url 'home:about' %}" class="nav-link px-2 {% if '/about/' in request.path %}link-secondary{% endif %}">About</a></li>
                 </ul>
 
                 <div class="col-md-3 text-end">

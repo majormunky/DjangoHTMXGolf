@@ -6,6 +6,7 @@ app_name = "home"
 
 urlpatterns = [
     path("", views.index, name="index"),
+    path("about/", views.about, name="about"),
     path("golf-courses/", views.golf_courses, name="golf-courses"),
     path("golf-courses/<int:pk>/", views.golf_course_detail, name="golf-course-detail"),
     path("golf-courses/create-course/<slug:form_slug>/", views.htmx_create_form, name="htmx-create-course"),
