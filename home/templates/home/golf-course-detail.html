@@ -3,17 +3,7 @@
 {% block content %}
 <div class="row">
     <div class="col-6" id="course-detail-card-wrapper">
-        <div class="card">
-            <div class="card-header bg-primary fw-bold text-white">{{obj.name}}</div>
-            <div class="card-body" id="course-detail-panel">
-                {% include "home/fragments/course-detail-panel.html" %}
-            </div>
-            {% if request.user.is_authenticated %}
-            <div class="card-footer">
-                <button hx-get="{% url 'home:htmx-edit-course' obj.id %}" hx-target="#course-detail-card-wrapper" class="btn btn-primary btn-sm">Edit</button>
-            </div>
-            {% endif %}
-        </div>
+        {% include "home/fragments/course-detail-panel.html" %}
     </div>
     <div class="col-6">
         <div class="card">

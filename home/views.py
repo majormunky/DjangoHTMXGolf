@@ -39,6 +39,7 @@ def golf_course_detail(request, pk):
         form = forms.GolfCourseForm(request.POST, instance=course_data)
         if form.is_valid():
             form.save()
+            return render(request, "home/fragments/course-detail-panel.html", {"obj": course_data})
     return render(request, "home/golf-course-detail.html", {"obj": course_data})
 
 

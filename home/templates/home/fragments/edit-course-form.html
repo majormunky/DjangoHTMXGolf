@@ -1,14 +1,15 @@
 {% load crispy_forms_tags %}
 
 <div class="card">
-    <div class="card-header bg-primary fw-bold text-white">{{obj.name}}</div>
+    <div class="card-header bg-primary fw-bold text-white">Edit: {{obj.name}}</div>
     <div class="card-body">
-        <form method="POST" hx-target="" action="." id="edit-course-form">
+        <form method="POST" hx-post="." hx-target="#course-detail-card-wrapper" action="." id="edit-course-form">
             {% csrf_token %}
             {{ form|crispy }}
         </form>
     </div>
     <div class="card-footer">
         <button type="submit" class="btn btn-primary btn-sm" form="edit-course-form">Submit</button>
+        <button type="button" class="btn btn-secondary btn-sm" >Cancel</button>
     </div>
 </div>

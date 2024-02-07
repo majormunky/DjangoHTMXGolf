@@ -1,13 +1,24 @@
-<p class="card-text">Tee Time Link:
-    {% if obj.tee_time_link %}
-    <a href="{{obj.tee_time_link}}">Link</a>
+<div class="card">
+    <div class="card-header bg-primary fw-bold text-white">{{obj.name}}</div>
+    <div class="card-body" id="course-detail-panel">
+        <p class="card-text">Tee Time Link:
+            {% if obj.tee_time_link %}
+            <a href="{{obj.tee_time_link}}">Link</a>
+            {% endif %}
+        </p>
+        <p class="card-text">Website Link:
+            {% if obj.website_link %}
+            <a href="{{obj.website_link}}">Link</a>
+            {% endif %}
+        </p>
+        <p class="card-text">City: {{obj.city}}</p>
+        <p class="card-text">State: {{obj.state}}</p>
+        <p class="card-text">Zip Code: {{obj.zip_code}}</p>
+    </div>
+    {% if request.user.is_authenticated %}
+    <div class="card-footer">
+        <button hx-get="{% url 'home:htmx-edit-course' obj.id %}" hx-target="#course-detail-card-wrapper" class="btn btn-primary btn-sm">Edit</button>
+    </div>
     {% endif %}
-</p>
-<p class="card-text">Website Link:
-    {% if obj.website_link %}
-    <a href="{{obj.website_link}}">Link</a>
-    {% endif %}
-</p>
-<p class="card-text">City: {{obj.city}}</p>
-<p class="card-text">State: {{obj.state}}</p>
-<p class="card-text">Zip Code: {{obj.zip_code}}</p>
+</div>
+
