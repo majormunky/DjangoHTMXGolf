@@ -23,4 +23,5 @@ urlpatterns = [
     path("accounts/logout/", auth_views.LogoutView.as_view(), name="logout"),
     path("admin/", admin.site.urls),
     path("", include("home.urls")),
+    path("__debug__/", include("debug_toolbar.urls")),
 ]
