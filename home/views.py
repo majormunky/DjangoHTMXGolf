@@ -43,8 +43,8 @@ def golf_course_detail(request, pk):
     return render(request, "home/golf-course-detail.html", {"obj": course_data})
 
 
-def hole_detail(request, pk):
-    hole_data = get_object_or_404(models.Hole, pk=pk)
+def hole_detail(request, course_pk, hole_pk):
+    hole_data = get_object_or_404(models.Hole, pk=hole_pk)
     course_data = hole_data.course
     tee_list = hole_data.tee_set.all()
     hole_form = forms.HoleParForm(instance=hole_data)
@@ -283,3 +283,8 @@ def htmx_course_detail_panel(request, pk):
         {"obj": course_data},
     )
 
+
+@login_required
+def htmx_create_tee_form(request, course_pk, hole_pk):
+    form = utils.get_form_by_slug("create-tee-form")
+    return render(request, "home/crispy-form.html", {"form": form, "form_id": "create-tee-form"})
