@@ -9,12 +9,20 @@
                 <p class="card-text">Game: <a href="{% url 'home:game-detail' game_data.id %}">View</a></p>
                 <hr>
                 <table class="table">
-                    {% for hole in hole_scores %}
-                    <tr>
-                        <td>{{hole.game_link.player.name}}</td>
-                        <td><input type="text" value="{{hole.score}}" name="score" size="1" hx-post="{% url 'home:score-hole' hole.id hole.game_link.id %}"></td>
-                    </tr>
-                    {% endfor %}
+                    <tbody class="align-middle">
+                        {% for hole in hole_scores %}
+                        <tr>
+                            <td>{{hole.game_link.player.name}}</td>
+                            <td>
+                                <button class="btn btn-primary btn-sm change-score-button" data-change-type="subtract">-</button>
+                                <span class="text-input">
+                                    <input type="text" value="{{hole.score}}" name="score" size="1" hx-post="{% url 'home:score-hole' hole.id hole.game_link.id %}">
+                                </span>
+                                <button class="btn btn-primary btn-sm change-score-button" data-change-type="add">+</button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
                 </table>
             </div>
             <div class="card-footer d-flex justify-content-between">
@@ -36,4 +44,46 @@
 {% endblock %}
 
 {% block page_scripts %}
+<script>
+ document.querySelectorAll(".change-score-button").forEach((el) => {
+     el.addEventListener("click", (event) => {
+         const changeType = event.target.dataset.changeType;
+         const changeTarget = event.target.parentNode.querySelector("input");
+         const inputVal = parseInt(changeTarget.value, 10);
+         let changed = false;
+         
+         if (changeType == "subtract") {
+             if (inputVal == 0) {
+                 return;
+             }
+             changeTarget.value = inputVal - 1;
+             changed = true;
+         } else if (changeType == "add") {
+             changeTarget.value = inputVal + 1;
+             changed = true;
+         }
+
+         if (changed) {
+             var evt = document.createEvent('HTMLEvents');
+             evt.initEvent('change', false, true);
+             changeTarget.dispatchEvent(evt);
+         }
+     })
+ });
+
+</script>
 {% endblock %}
+
+{% block page_styles %}
+<style>
+ .text-input {
+     position: relative;
+     top: 2px;
+ }
+
+ .text-input input {
+     text-align: center;
+ }
+</style>
+{% endblock %}
+
