@@ -40,6 +40,40 @@
     </div>
 </div>
 
+{% if game_data.status != "setup" %}
+<div class="row mt-3">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white fw-bold">Scores</div>
+            <div class="card-body">
+                <table class="table table-striped-columns">
+                    <thead>
+                        <tr>
+                            {% for header_item in score_data.header %}
+                            <th>{{header_item}}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for score_row in score_data.rows %}
+                        <tr>
+                            {% for score_item in score_row %}
+                            <td>{{score_item}}</td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer">
+                <button class="btn btn-primary btn-sm">Download Scorecard</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
 <div class="modal fade" id="add-player-modal" tabindex="-1" aria-labelledby="add-player-modal-label" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">

@@ -1,3 +1,4 @@
+import collections
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
@@ -139,17 +140,48 @@ def games(request):
 def game_detail(request, pk):
     game_data = get_object_or_404(models.Game, pk=pk)
     player_links = models.PlayerGameLink.objects.filter(game=game_data)
+    hole_list = models.Hole.objects.filter(course=game_data.course).order_by("order")
+    
     first_hole_score = (
         models.HoleScore.objects.filter(hole__course=game_data.course)
         .order_by("hole__order")
         .first()
     )
+    score_list = (
+        models.HoleScore.objects.filter(hole__course=game_data.course, game_link__game=game_data)
+        .order_by("hole__order")
+    )
+
+    score_data = {"header": None, "rows": []}
+
+    hole_row = ["Hole"]
+    for hole in hole_list:
+        hole_row.append(hole.order + 1)
+    hole_row.append("Total")
+
+    score_data["header"] = hole_row
+
+    player_scores = {}
+
+    for player in player_links:
+        player_scores[player.player.name] = []
+
+    for score in score_list:
+        player_scores[score.game_link.player.name].append(score.score)
+
+    for player_name, score_list in player_scores.items():
+        player_row = [player_name] + score_list
+        player_row.append(sum(score_list))
+        score_data["rows"].append(player_row)
+        
+    
     if request.method == "POST":
         form = forms.PlayerGameLinkForm(request.POST)
         if form.is_valid():
             link = form.save(commit=False)
             link.game = game_data
             link.save()
+
     return render(
         request,
         "home/game-detail.html",
@@ -157,6 +189,7 @@ def game_detail(request, pk):
             "game_data": game_data,
             "player_links": player_links,
             "first_hole_score": first_hole_score,
+            "score_data": score_data
         },
     )
 
