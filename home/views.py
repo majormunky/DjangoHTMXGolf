@@ -186,7 +186,10 @@ def play_game(request, game_pk, hole_score_pk):
         game_link__game=game_data,
     ).first()
 
-    hole_scores = models.HoleScore.objects.filter(hole=hole_data)
+    hole_scores = models.HoleScore.objects.filter(
+        hole=hole_data,
+        game_link__game=game_data
+    )
     return render(
         request,
         "home/play-game.html",
