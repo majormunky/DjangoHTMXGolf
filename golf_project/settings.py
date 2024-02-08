@@ -98,18 +98,6 @@ else:
             "NAME": "/var/data/db.sqlite3",
         }
     }
-    # else:
-#     DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "NAME": os.environ.get("DB_NAME"),
-#         "USER": os.environ.get("DB_USER"),
-#         "PASSWORD": os.environ.get("DB_PASS"),
-#         "HOST": os.environ.get("DATABASE_URL"),
-#         "PORT": os.environ.get("DB_PORT"),
-#     }
-# }
-
 
 
 # Password validation
@@ -177,6 +165,11 @@ LOGOUT_REDIRECT_URL = "/"
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
+
+DEBUG_TOOLBAR_CONFIG = {
+    "ROOT_TAG_EXTRA_ATTRS": "hx-preserve",
+    "SHOW_COLLAPSED": True
+}
 
 
 # Email settings
