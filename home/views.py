@@ -36,14 +36,16 @@ def golf_courses(request):
 
 def golf_course_detail(request, pk):
     course_data = get_object_or_404(models.GolfCourse, pk=pk)
+    front_holes = models.Hole.objects.filter(course=course_data, order__lte=8)
+    back_holes = models.Hole.objects.filter(course=course_data, order__gte=9)
     if request.method == "POST":
         form = forms.GolfCourseForm(request.POST, instance=course_data)
         if form.is_valid():
             form.save()
             return render(
-                request, "home/fragments/course-detail-panel.html", {"obj": course_data}
+                request, "home/fragments/course-detail-panel.html", {"obj": course_data, "front_holes": front_holes, "back_holes" : back_holes}
             )
-    return render(request, "home/golf-course-detail.html", {"obj": course_data})
+    return render(request, "home/golf-course-detail.html", {"obj": course_data, "front_holes": front_holes, "back_holes" : back_holes})
 
 
 def hole_detail(request, course_pk, hole_pk):

@@ -9,26 +9,72 @@
         <div class="card">
             <div class="card-header bg-primary fw-bold text-white">Holes</div>
             <div class="card-body">
-                {% if obj.hole_set.all %}
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th style="width: 5%">&nbsp;</th>
-                            <th>Name</th>
-                            <th>Par</th>
-                        </tr>
-                    </thead>
-                    <tbody class="align-middle">
-                        {% for hole in obj.hole_set.all %}
-                        <tr>
-                            <td><a href="{% url 'home:hole-detail' obj.id hole.id %}" class="btn btn-primary btn-sm">View</a></td>
-                            <td>{{hole.name}}</td>
-                            <td>{{hole.par}}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                {% if obj.hole_count == "9" %}
+                <ul class="nav nav-tabs">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" aria-current="page" data-bs-toggle="tab" data-bs-target="#front-9-panel">Front 9</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" aria-disabled="true" disabled>Back 9</button>
+                    </li>
+                </ul>
+                {% else %}
+                <ul class="nav nav-tabs">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" aria-current="page" data-bs-toggle="tab" data-bs-target="#front-9-panel">Front 9</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#back-9-panel">Back 9</button>
+                    </li>
+                </ul>
                 {% endif %}
+
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="front-9-panel" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+                        {% if front_holes %}
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="width: 5%">&nbsp;</th>
+                                    <th>Name</th>
+                                    <th>Par</th>
+                                </tr>
+                            </thead>
+                            <tbody class="align-middle">
+                                {% for hole in front_holes %}
+                                <tr>
+                                    <td><a href="{% url 'home:hole-detail' obj.id hole.id %}" class="btn btn-primary btn-sm">View</a></td>
+                                    <td>{{hole.name}}</td>
+                                    <td>{{hole.par}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% endif %}
+                    </div>
+                    <div class="tab-pane fade" id="back-9-panel" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+                        {% if back_holes %}
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="width: 5%">&nbsp;</th>
+                                    <th>Name</th>
+                                    <th>Par</th>
+                                </tr>
+                            </thead>
+                            <tbody class="align-middle">
+                                {% for hole in back_holes %}
+                                <tr>
+                                    <td><a href="{% url 'home:hole-detail' obj.id hole.id %}" class="btn btn-primary btn-sm">View</a></td>
+                                    <td>{{hole.name}}</td>
+                                    <td>{{hole.par}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
