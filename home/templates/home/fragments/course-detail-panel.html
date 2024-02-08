@@ -1,19 +1,36 @@
 <div class="card">
     <div class="card-header bg-primary fw-bold text-white">{{obj.name}}</div>
     <div class="card-body" id="course-detail-panel">
-        <p class="card-text">Tee Time Link:
-            {% if obj.tee_time_link %}
-            <a href="{{obj.tee_time_link}}">Link</a>
-            {% endif %}
-        </p>
-        <p class="card-text">Website Link:
-            {% if obj.website_link %}
-            <a href="{{obj.website_link}}">Link</a>
-            {% endif %}
-        </p>
-        <p class="card-text">City: {{obj.city}}</p>
-        <p class="card-text">State: {{obj.state}}</p>
-        <p class="card-text">Zip Code: {{obj.zip_code}}</p>
+        <table>
+            <tr>
+                <td class="text-end">Tee Time:</td>
+                <td class="ps-3">
+                    {% if obj.tee_time_link %}
+                    <a href="{{obj.tee_time_link}}">Link</a>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td class="text-end">Website:</td>
+                <td class="ps-3">
+                    {% if obj.website_link %}
+                    <a href="{{obj.website_link}}">Link</a>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td class="text-end">City:</td>
+                <td class="ps-3">{{obj.city}}</td>
+            </tr>
+            <tr>
+                <td class="text-end">State:</td>
+                <td class="ps-3">{{obj.state}}</td>
+            </tr>
+            <tr>
+                <td class="text-end">Zip Code:</td>
+                <td class="ps-3">{{obj.zip_code}}</td>
+            </tr>
+        </table>
     </div>
     {% if request.user.is_authenticated %}
     <div class="card-footer">
