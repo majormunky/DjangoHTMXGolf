@@ -142,40 +142,72 @@ def games(request):
 def game_detail(request, pk):
     game_data = get_object_or_404(models.Game, pk=pk)
     player_links = models.PlayerGameLink.objects.filter(game=game_data)
-    hole_list = models.Hole.objects.filter(course=game_data.course).order_by("order")
+
+    front_hole_list = models.Hole.objects.filter(course=game_data.course, order__lte=8).order_by("order")
+    back_hole_list = models.Hole.objects.filter(course=game_data.course, order__gte=9).order_by("order")
     
     first_hole_score = (
         models.HoleScore.objects.filter(hole__course=game_data.course)
         .order_by("hole__order")
         .first()
     )
-    score_list = (
-        models.HoleScore.objects.filter(hole__course=game_data.course, game_link__game=game_data)
+
+    front_score_list = (
+        models.HoleScore.objects.filter(hole__course=game_data.course, game_link__game=game_data, hole__order__lte=8)
         .order_by("hole__order")
     )
 
-    score_data = {"header": None, "rows": []}
+    back_score_list = (
+        models.HoleScore.objects.filter(hole__course=game_data.course, game_link__game=game_data, hole__order__gte=9)
+        .order_by("hole__order")
+    )
 
-    hole_row = ["Hole"]
-    for hole in hole_list:
-        hole_row.append(hole.order + 1)
-    hole_row.append("Total")
+    score_data = {
+        "header": {
+            "front": [],
+            "back": []
+        },
+        "rows": {
+            "front": [],
+            "back": []
+        }
+    }
 
-    score_data["header"] = hole_row
+    active_tab = "front"
+    if game_data.holes_played == "back-9":
+        active_tab = "back"
 
-    player_scores = {}
+    if game_data.holes_played in ["9", "front-9", "18"]:
+        front_hole_row = ["Hole"]
+        for hole in front_hole_list:
+            front_hole_row.append(hole.order + 1)
+        front_hole_row.append("Total")
+        score_data["header"]["front"] = front_hole_row
+
+    if game_data.holes_played in ["back-9", "18"]:
+        back_hole_row = ["Hole"]
+        for hole in back_hole_list:
+            back_hole_row.append(hole.order + 1)
+        back_hole_row.append("Total")
+        score_data["header"]["back"] = back_hole_row
+
+    player_scores = {"front": {}, "back": {}}
 
     for player in player_links:
-        player_scores[player.player.name] = []
+        player_scores["front"][player.player.name] = []
+        player_scores["back"][player.player.name] = []
 
-    for score in score_list:
-        player_scores[score.game_link.player.name].append(score.score)
+    for front_score in front_score_list:
+        player_scores["front"][front_score.game_link.player.name].append(front_score.score)
 
-    for player_name, score_list in player_scores.items():
-        player_row = [player_name] + score_list
-        player_row.append(sum(score_list))
-        score_data["rows"].append(player_row)
-        
+    for back_score in back_score_list:
+        player_scores["back"][back_score.game_link.player.name].append(back_score.score)
+
+    for course_pos in ["front", "back"]:
+        for player_name, score_list in player_scores[course_pos].items():
+            player_row = [player_name] + score_list
+            player_row.append(sum(score_list))
+            score_data["rows"][course_pos].append(player_row)
     
     if request.method == "POST":
         form = forms.PlayerGameLinkForm(request.POST)
@@ -191,7 +223,8 @@ def game_detail(request, pk):
             "game_data": game_data,
             "player_links": player_links,
             "first_hole_score": first_hole_score,
-            "score_data": score_data
+            "score_data": score_data,
+            "active_tab": active_tab
         },
     )
 
