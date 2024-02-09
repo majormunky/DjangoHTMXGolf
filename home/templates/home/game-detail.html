@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="row">
-    <div class="col-6">
+    <div class="col-sm-6 mb-3">
         <div class="card">
             <div class="card-header bg-primary fw-bold text-white">Game Detail</div>
             <div class="card-body">
@@ -39,7 +39,7 @@
         </div>
         
     </div>
-    <div class="col-6">
+    <div class="col-sm-6">
         <div class="card">
             <div class="card-header bg-primary fw-bold text-white">Players</div>
             <div class="card-body" id="game-player-list">
@@ -95,7 +95,11 @@
                                 <thead class="text-center">
                                     <tr>
                                         {% for header_item in score_data.header.front %}
+                                        {% if forloop.first %}
+                                        <th class="text-end">{{header_item}}</th>
+                                        {% else %}
                                         <th>{{header_item}}</th>
+                                        {% endif %}
                                         {% endfor %}
                                     </tr>
                                 </thead>
@@ -121,7 +125,11 @@
                                 <thead class="text-center">
                                     <tr>
                                         {% for header_item in score_data.header.back %}
+                                        {% if forloop.first %}
+                                        <th class="text-end">{{header_item}}</th>
+                                        {% else %}
                                         <th>{{header_item}}</th>
+                                        {% endif %}
                                         {% endfor %}
                                     </tr>
                                 </thead>
