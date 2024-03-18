@@ -162,13 +162,18 @@ LOGOUT_REDIRECT_URL = "/"
 
 
 # Django debug toolbar settings
+def show_toolbar(request):
+    return False
+
+
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
 DEBUG_TOOLBAR_CONFIG = {
     "ROOT_TAG_EXTRA_ATTRS": "hx-preserve",
-    "SHOW_COLLAPSED": True
+    "SHOW_COLLAPSED": True,
+    "SHOW_TOOLBAR_CALLBACK": "golf_project.settings.show_toolbar"
 }
 
 
