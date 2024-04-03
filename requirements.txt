@@ -1,5 +1,6 @@
 asgiref==3.7.2
 Brotli==1.1.0
+chardet==5.2.0
 crispy-bootstrap5==2023.10
 Django==5.0.1
 django-crispy-forms==2.1
@@ -7,9 +8,11 @@ django-debug-toolbar==4.3.0
 gunicorn==21.2.0
 iniconfig==2.0.0
 packaging==23.2
+pillow==10.3.0
 pluggy==1.4.0
 pytest==8.0.0
 pytest-django==4.8.0
 python-dotenv==1.0.1
+reportlab==4.1.0
 sqlparse==0.4.4
 whitenoise==6.6.0
