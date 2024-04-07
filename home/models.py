@@ -65,6 +65,14 @@ class Game(models.Model):
         if self.holes_played in ["9", "18"]:
             return self.holes_played
         return self.holes_played.replace("-", " ").title()
+
+    def get_holes(self):
+        if self.holes_played == self.course.hole_count:
+            return Hole.objects.filter(course=self.course).order_by("order")
+        elif self.holes_played == "front-9":
+            return Hole.objects.filter(course=self.course, order__lte=8).order_by("order")
+        elif self.holes_played == "back-9":
+            return Hole.objects.filter(course=self.course, order__gte=9).order_by("order")
         
 
 class Player(models.Model):
