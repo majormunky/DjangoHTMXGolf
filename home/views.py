@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from . import models
 from . import forms
 from . import utils
+from . import pdf_utils
 
 
 def index(request):
@@ -299,6 +300,15 @@ def remove_player_from_game(request, player_pk, game_pk):
         "home/game-player-table.html",
         {"game_data": game_data, "player_links": player_links},
     )
+
+
+@login_required
+def download_scorecard(request, game_pk):
+    game_data = get_object_or_404(models.Game, pk=game_pk)
+    pdf_data = pdf_utils.generate_scorecard(game_data)
+    response = HttpResponse(pdf_data.getvalue(), content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename=scorecard.pdf'
+    return response
 
 
 @login_required

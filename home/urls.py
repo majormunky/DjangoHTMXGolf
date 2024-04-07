@@ -27,4 +27,5 @@ urlpatterns = [
     path("games/<int:game_pk>/remove-player/<int:player_pk>/", views.remove_player_from_game, name="remove-player-from-game"),
     path("games/<int:hole_pk>/score-hole/<int:link_pk>/", views.score_hole, name="score-hole"),
     path("games/<int:pk>/start-game/", views.start_game, name="start-game"),
+    path("games/<int:game_pk>/download-scorecard/", views.download_scorecard, name="download-scorecard"),
 ]
