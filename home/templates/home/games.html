@@ -15,6 +15,7 @@
                             <th>Course</th>
                             <th>Status</th>
                             <th>Holes</th>
+                            <th>Date Played</th>
                         </tr>
                     </thead>
                     <tbody class="align-middle">
@@ -24,6 +25,7 @@
                             <td>{{game.course.name}}</td>
                             <td>{{game.get_status_display}}</td>
                             <td>{{game.get_holes_played}}</td>
+                            <td>{{game.date_played}}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
