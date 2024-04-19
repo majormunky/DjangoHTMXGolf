@@ -34,6 +34,7 @@
             {% elif game_data.status == "active" %}
             <div class="card-footer">
                 <a class="btn btn-primary btn-sm" href="{% url 'home:play-game' game_data.id first_hole_score.id %}">Score Game</a>
+                <a class="btn btn-primary btn-sm" href="#">Finish Game</a>
             </div>
             {% endif %}
         </div>
@@ -47,7 +48,12 @@
             </div>
             {% if game_data.status == "setup" %}
             <div class="card-footer">
-                <button hx-get="{% url 'home:htmx-create-player-form' game_data.id %}" hx-target="#add-player-form" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#add-player-modal">Add Player</button>
+                <button
+                    hx-get="{% url 'home:htmx-create-player-form' game_data.id %}"
+                    hx-target="#add-player-form" class="btn btn-primary btn-sm"
+                    data-bs-toggle="modal"
+                    data-bs-target="#add-player-modal"
+                >Add Player</button>
             </div>
             {% endif %}
         </div>
