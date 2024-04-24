@@ -242,8 +242,7 @@ def start_game(request, pk):
 def finish_game(request, pk):
     game_data = get_object_or_404(models.Game, pk=pk)
     game_data.finish()
-    print("Game finished")
-    return HttpResponse("success")
+    return render(request, "home/fragments/game-detail-panel.html", {"game_data": game_data})
 
 
 @login_required

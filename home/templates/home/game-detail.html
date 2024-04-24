@@ -142,7 +142,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" hx-post="{% url 'home:finish-game' game_data.id %}">Confirm</button>
+                <button type="button" class="btn btn-primary" hx-post="{% url 'home:finish-game' game_data.id %}" hx-target="#game-detail-panel">Confirm</button>
             </div>
         </div>
     </div>
@@ -187,4 +187,19 @@
 {% endblock %}
 
 {% block page_scripts %}
+<script>
+ let finishModal;
+ document.addEventListener("DOMContentLoaded", () => {
+     finishModal = new bootstrap.Modal("#finish-game-confirm-modal");
+
+     document.getElementById("finish-game-modal-button").addEventListener("click", () => {
+         finishModal.show();
+     });
+ });
+ document.addEventListener("htmx:afterSwap", (event) => {
+     if (event.detail.pathInfo.requestPath.includes("finish-game")) {
+         finishModal.hide();
+     }
+ });
+</script>
 {% endblock %}
