@@ -24,12 +24,12 @@
     </div>
     {% if game_data.status == "setup" %}
     <div class="card-footer">
-        <button class="btn btn-primary btn-sm" id="start-game-modal-button">Start Game</button>
+        <button class="btn btn-primary btn-sm" id="start-game-modal-button" data-bs-toggle="modal" data-bs-target="#start-game-confirm-modal">Start Game</button>
     </div>
     {% elif game_data.status == "active" %}
     <div class="card-footer">
         <a class="btn btn-primary btn-sm" href="{% url 'home:play-game' game_data.id first_hole_score.id %}">Score Game</a>
-        <button class="btn btn-primary btn-sm" id="finish-game-modal-button">Finish Game</button>
+        <button class="btn btn-primary btn-sm" id="finish-game-modal-button" data-bs-toggle="modal" data-bs-target="#finish-game-confirm-modal">Finish Game</button>
     </div>
     {% endif %}
 </div>

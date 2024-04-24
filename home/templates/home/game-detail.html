@@ -188,38 +188,16 @@
 
 {% block page_scripts %}
 <script>
- var finishModal;
- var finishGameButton;
- var startModal;
- var startGameButton;
-
- document.addEventListener("DOMContentLoaded", () => {
-     finishModal = new bootstrap.Modal("#finish-game-confirm-modal");
-     finishGameButton = document.getElementById("finish-game-modal-button");
-     startModal = new bootstrap.Modal("#start-game-confirm-modal");
-     startGameButton = document.getElementById("start-game-modal-button");
-
-     if (finishGameButton) {
-         finishGameButton.addEventListener("click", () => {
-             finishModal.show();
-         });
-     }
-
-     if (startGameButton) {
-         startGameButton.addEventListener("click", () => {
-             startModal.show();
-         });
-     }
- });
- 
  document.addEventListener("htmx:afterSwap", (event) => {
      if (event.detail.pathInfo.requestPath.includes("finish-game")) {
-         finishModal.hide();
+         let modal = bootstrap.Modal.getInstance("#finish-game-confirm-modal");
+         modal.hide();
          return;
      }
 
      if (event.detail.pathInfo.requestPath.includes("start-game")) {
-         startModal.hide();
+         let modal = bootstrap.Modal.getInstance("#start-game-confirm-modal");
+         modal.hide();
          return;
      }
 
