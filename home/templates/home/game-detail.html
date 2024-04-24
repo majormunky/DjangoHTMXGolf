@@ -188,13 +188,18 @@
 
 {% block page_scripts %}
 <script>
- let finishModal;
+ var finishModal;
+ var finishGameButton;
+ console.log("Code in main script tag running");
  document.addEventListener("DOMContentLoaded", () => {
      finishModal = new bootstrap.Modal("#finish-game-confirm-modal");
+     finishGameButton = document.getElementById("finish-game-modal-button");
 
-     document.getElementById("finish-game-modal-button").addEventListener("click", () => {
-         finishModal.show();
-     });
+     if (finishGameButton) {
+         document.getElementById("finish-game-modal-button").addEventListener("click", () => {
+             finishModal.show();
+         });
+     }
  });
  document.addEventListener("htmx:afterSwap", (event) => {
      if (event.detail.pathInfo.requestPath.includes("finish-game")) {
