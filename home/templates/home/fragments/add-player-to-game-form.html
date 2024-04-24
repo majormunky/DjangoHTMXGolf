@@ -1,0 +1,10 @@
+{% load crispy_forms_tags %}
+
+<form
+    id="add-player-to-game-form"
+    hx-post="{% url 'home:add-player-to-game' game_data.id %}"
+    hx-target="#game-player-list"
+>
+    {% csrf_token %}
+    {{ form|crispy }}
+</form>

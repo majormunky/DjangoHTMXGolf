@@ -210,13 +210,6 @@ def game_detail(request, pk):
             player_row.append(sum(score_list))
             score_data["rows"][course_pos].append(player_row)
 
-    if request.method == "POST":
-        form = forms.PlayerGameLinkForm(request.POST)
-        if form.is_valid():
-            link = form.save(commit=False)
-            link.game = game_data
-            link.save()
-
     return render(
         request,
         "home/game-detail.html",
@@ -276,7 +269,16 @@ def score_hole(request, hole_pk, link_pk):
 
 
 @login_required
-def remove_player_from_game(request, player_pk, game_pk):
+def download_scorecard(request, game_pk):
+    game_data = get_object_or_404(models.Game, pk=game_pk)
+    pdf_data = pdf_utils.generate_scorecard(game_data)
+    response = HttpResponse(pdf_data.getvalue(), content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename=scorecard.pdf'
+    return response
+
+
+@login_required
+def htmx_remove_player_from_game(request, player_pk, game_pk):
     player_data = models.Player.objects.filter(pk=player_pk).first()
     game_data = models.Game.objects.filter(pk=game_pk).first()
     game_link = models.PlayerGameLink.objects.filter(
@@ -289,18 +291,26 @@ def remove_player_from_game(request, player_pk, game_pk):
 
     return render(
         request,
-        "home/game-player-table.html",
+        "home/fragments/game-player-table.html",
         {"game_data": game_data, "player_links": player_links},
     )
 
 
 @login_required
-def download_scorecard(request, game_pk):
-    game_data = get_object_or_404(models.Game, pk=game_pk)
-    pdf_data = pdf_utils.generate_scorecard(game_data)
-    response = HttpResponse(pdf_data.getvalue(), content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename=scorecard.pdf'
-    return response
+def htmx_add_player_to_game(request, pk):
+    game_data = get_object_or_404(models.Game, pk=pk)
+    player_links = models.PlayerGameLink.objects.filter(game=game_data)
+    if request.method == "POST":
+        form = forms.PlayerGameLinkForm(request.POST)
+        if form.is_valid():
+            link = form.save(commit=False)
+            link.game = game_data
+            link.save()
+        return render(
+            request,
+            "home/fragments/game-player-table.html",
+            {"game_data": game_data, "player_links": player_links}
+        )
 
 
 @login_required
@@ -338,8 +348,8 @@ def htmx_create_players_form(request, pk):
     form.fields["player"].queryset = form_queryset
     return render(
         request,
-        "home/crispy-form.html",
-        {"form": form, "form_id": "add-player-to-game-form"},
+        "home/fragments/add-player-to-game-form.html",
+        {"form": form, "game_data": game_data},
     )
 
 

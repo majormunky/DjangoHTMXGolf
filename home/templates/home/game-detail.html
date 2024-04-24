@@ -9,7 +9,7 @@
         <div class="card">
             <div class="card-header bg-primary fw-bold text-white">Players</div>
             <div class="card-body" id="game-player-list">
-                {% include "home/game-player-table.html" %}
+                {% include "home/fragments/game-player-table.html" %}
             </div>
             {% if game_data.status == "setup" %}
             <div class="card-footer">
@@ -160,7 +160,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary" form="add-player-to-game-form">Save changes</button>
+                <button type="submit" class="btn btn-primary" form="add-player-to-game-form">Add</button>
             </div>
         </div>
     </div>
@@ -222,6 +222,14 @@
          startModal.hide();
          return;
      }
+
+     if (event.detail.pathInfo.requestPath.includes("add-player-to-game")) {
+         let modal = bootstrap.Modal.getInstance("#add-player-modal");
+         modal.hide();
+         return;
+     }
+     console.log("After Swap");
+     console.log(event);
  });
 </script>
 {% endblock %}

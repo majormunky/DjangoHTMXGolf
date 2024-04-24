@@ -24,9 +24,10 @@ urlpatterns = [
     path("games/create/<slug:form_slug>/", views.htmx_create_form, name="htmx-create-game"),
     path("games/test-create/", views.htmx_create_game_form, name="htmx-create-game-form-test"),
     path("games/<int:pk>/add-player/", views.htmx_create_players_form, name="htmx-create-player-form"),
-    path("games/<int:game_pk>/remove-player/<int:player_pk>/", views.remove_player_from_game, name="remove-player-from-game"),
+    path("games/<int:game_pk>/remove-player/<int:player_pk>/", views.htmx_remove_player_from_game, name="remove-player-from-game"),
     path("games/<int:hole_pk>/score-hole/<int:link_pk>/", views.score_hole, name="score-hole"),
     path("games/<int:pk>/start-game/", views.htmx_start_game, name="start-game"),
     path("games/<int:pk>/finish-game/", views.htmx_finish_game, name="finish-game"),
+    path("games/<int:pk>/add-player-to-game/", views.htmx_add_player_to_game, name="add-player-to-game"),
     path("games/<int:game_pk>/download-scorecard/", views.download_scorecard, name="download-scorecard"),
 ]
