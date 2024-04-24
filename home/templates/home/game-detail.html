@@ -178,7 +178,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary" hx-post="{% url 'home:start-game' game_data.id %}">Start Game</button>
+                <button type="submit" class="btn btn-primary" hx-post="{% url 'home:start-game' game_data.id %}" hx-target="#game-detail-panel">Start Game</button>
             </div>
         </div>
     </div>
@@ -190,20 +190,37 @@
 <script>
  var finishModal;
  var finishGameButton;
- console.log("Code in main script tag running");
+ var startModal;
+ var startGameButton;
+
  document.addEventListener("DOMContentLoaded", () => {
      finishModal = new bootstrap.Modal("#finish-game-confirm-modal");
      finishGameButton = document.getElementById("finish-game-modal-button");
+     startModal = new bootstrap.Modal("#start-game-confirm-modal");
+     startGameButton = document.getElementById("start-game-modal-button");
 
      if (finishGameButton) {
-         document.getElementById("finish-game-modal-button").addEventListener("click", () => {
+         finishGameButton.addEventListener("click", () => {
              finishModal.show();
          });
      }
+
+     if (startGameButton) {
+         startGameButton.addEventListener("click", () => {
+             startModal.show();
+         });
+     }
  });
+ 
  document.addEventListener("htmx:afterSwap", (event) => {
      if (event.detail.pathInfo.requestPath.includes("finish-game")) {
          finishModal.hide();
+         return;
+     }
+
+     if (event.detail.pathInfo.requestPath.includes("start-game")) {
+         startModal.hide();
+         return;
      }
  });
 </script>

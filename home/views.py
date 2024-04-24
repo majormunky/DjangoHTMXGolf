@@ -235,7 +235,12 @@ def start_game(request, pk):
     game_data = get_object_or_404(models.Game, pk=pk)
     game_data.start()
     utils.setup_scores_for_game(game_data)
-    return HttpResponse("success")
+    first_hole_score = (
+        models.HoleScore.objects.filter(hole__course=game_data.course)
+        .order_by("hole__order")
+        .first()
+    )
+    return render(request, "home/fragments/game-detail-panel.html", {"game_data": game_data, "first_hole_score": first_hole_score})
 
 
 @login_required

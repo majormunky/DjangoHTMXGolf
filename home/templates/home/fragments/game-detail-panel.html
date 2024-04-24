@@ -24,7 +24,7 @@
     </div>
     {% if game_data.status == "setup" %}
     <div class="card-footer">
-        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#start-game-confirm-modal">Start Game</button>
+        <button class="btn btn-primary btn-sm" id="start-game-modal-button">Start Game</button>
     </div>
     {% elif game_data.status == "active" %}
     <div class="card-footer">
