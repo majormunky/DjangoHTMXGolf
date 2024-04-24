@@ -231,26 +231,6 @@ def game_detail(request, pk):
 
 
 @login_required
-def start_game(request, pk):
-    game_data = get_object_or_404(models.Game, pk=pk)
-    game_data.start()
-    utils.setup_scores_for_game(game_data)
-    first_hole_score = (
-        models.HoleScore.objects.filter(hole__course=game_data.course)
-        .order_by("hole__order")
-        .first()
-    )
-    return render(request, "home/fragments/game-detail-panel.html", {"game_data": game_data, "first_hole_score": first_hole_score})
-
-
-@login_required
-def finish_game(request, pk):
-    game_data = get_object_or_404(models.Game, pk=pk)
-    game_data.finish()
-    return render(request, "home/fragments/game-detail-panel.html", {"game_data": game_data})
-
-
-@login_required
 def play_game(request, game_pk, hole_score_pk):
     hole_score_data = get_object_or_404(models.HoleScore, pk=hole_score_pk)
     game_data = get_object_or_404(models.Game, pk=game_pk)
@@ -321,6 +301,26 @@ def download_scorecard(request, game_pk):
     response = HttpResponse(pdf_data.getvalue(), content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=scorecard.pdf'
     return response
+
+
+@login_required
+def htmx_start_game(request, pk):
+    game_data = get_object_or_404(models.Game, pk=pk)
+    game_data.start()
+    utils.setup_scores_for_game(game_data)
+    first_hole_score = (
+        models.HoleScore.objects.filter(hole__course=game_data.course)
+        .order_by("hole__order")
+        .first()
+    )
+    return render(request, "home/fragments/game-detail-panel.html", {"game_data": game_data, "first_hole_score": first_hole_score})
+
+
+@login_required
+def htmx_finish_game(request, pk):
+    game_data = get_object_or_404(models.Game, pk=pk)
+    game_data.finish()
+    return render(request, "home/fragments/game-detail-panel.html", {"game_data": game_data})
 
 
 @login_required
