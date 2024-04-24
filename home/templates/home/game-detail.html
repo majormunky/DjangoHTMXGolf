@@ -3,42 +3,7 @@
 {% block content %}
 <div class="row">
     <div class="col-sm-6 mb-3">
-        <div class="card">
-            <div class="card-header bg-primary fw-bold text-white">Game Detail</div>
-            <div class="card-body">
-                <table>
-                    <tr>
-                        <td class="text-end fw-bold">Course:</td>
-                        <td class="ps-3">{{game_data.course.name}}</td>
-                    </tr>
-                    <tr>
-                        <td class="text-end fw-bold">Status:</td>
-                        <td class="ps-3">{{game_data.get_status_display}}</td>                        
-                    </tr>
-                    <tr>
-                        <td class="text-end fw-bold">Holes:</td>
-                        <td class="ps-3">{{game_data.get_holes_played}}</td>
-                    </tr>
-                    {% if game_data.status != "setup" %}
-                    <tr>
-                        <td class="text-end fw-bold">Date Started:</td>
-                        <td class="ps-3">{{game_data.date_started}}</td>
-                    </tr>
-                    {% endif %}
-                </table>
-            </div>
-            {% if game_data.status == "setup" %}
-            <div class="card-footer">
-                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#start-game-confirm-modal">Start Game</button>
-            </div>
-            {% elif game_data.status == "active" %}
-            <div class="card-footer">
-                <a class="btn btn-primary btn-sm" href="{% url 'home:play-game' game_data.id first_hole_score.id %}">Score Game</a>
-                <a class="btn btn-primary btn-sm" href="#">Finish Game</a>
-            </div>
-            {% endif %}
-        </div>
-        
+        {% include "home/fragments/game-detail-panel.html" %}
     </div>
     <div class="col-sm-6">
         <div class="card">
@@ -164,6 +129,25 @@
     </div>
 </div>
 {% endif %}
+
+<div class="modal fade" id="finish-game-confirm-modal" tabindex="-1" aria-labelledby="finish-game-confirm-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="finish-game-confirm-modal-label">Finish Game?</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to finish this game?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" hx-post="{% url 'home:finish-game' game_data.id %}">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div class="modal fade" id="add-player-modal" tabindex="-1" aria-labelledby="add-player-modal-label" aria-hidden="true">
     <div class="modal-dialog">

@@ -1,0 +1,35 @@
+<div class="card" id="game-detail-panel">
+    <div class="card-header bg-primary fw-bold text-white">Game Detail</div>
+    <div class="card-body">
+        <table>
+            <tr>
+                <td class="text-end fw-bold">Course:</td>
+                <td class="ps-3">{{game_data.course.name}}</td>
+            </tr>
+            <tr>
+                <td class="text-end fw-bold">Status:</td>
+                <td class="ps-3">{{game_data.get_status_display}}</td>
+            </tr>
+            <tr>
+                <td class="text-end fw-bold">Holes:</td>
+                <td class="ps-3">{{game_data.get_holes_played}}</td>
+            </tr>
+            {% if game_data.status != "setup" %}
+            <tr>
+                <td class="text-end fw-bold">Date Played:</td>
+                <td class="ps-3">{{game_data.date_played}}</td>
+            </tr>
+            {% endif %}
+        </table>
+    </div>
+    {% if game_data.status == "setup" %}
+    <div class="card-footer">
+        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#start-game-confirm-modal">Start Game</button>
+    </div>
+    {% elif game_data.status == "active" %}
+    <div class="card-footer">
+        <a class="btn btn-primary btn-sm" href="{% url 'home:play-game' game_data.id first_hole_score.id %}">Score Game</a>
+        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#finish-game-confirm-modal">Finish Game</button>
+    </div>
+    {% endif %}
+</div>
