@@ -146,7 +146,7 @@ def game_detail(request, pk):
 
     front_hole_list = models.Hole.objects.filter(course=game_data.course, order__lte=8).order_by("order")
     back_hole_list = models.Hole.objects.filter(course=game_data.course, order__gte=9).order_by("order")
-    
+
     first_hole_score = (
         models.HoleScore.objects.filter(hole__course=game_data.course)
         .order_by("hole__order")
@@ -209,7 +209,7 @@ def game_detail(request, pk):
             player_row = [player_name] + score_list
             player_row.append(sum(score_list))
             score_data["rows"][course_pos].append(player_row)
-    
+
     if request.method == "POST":
         form = forms.PlayerGameLinkForm(request.POST)
         if form.is_valid():
@@ -235,6 +235,14 @@ def start_game(request, pk):
     game_data = get_object_or_404(models.Game, pk=pk)
     game_data.start()
     utils.setup_scores_for_game(game_data)
+    return HttpResponse("success")
+
+
+@login_required
+def finish_game(request, pk):
+    game_data = get_object_or_404(models.Game, pk=pk)
+    game_data.finish()
+    print("Game finished")
     return HttpResponse("success")
 
 
