@@ -12,7 +12,8 @@
                     <tbody class="align-middle">
                         {% for hole in hole_scores %}
                         <tr>
-                            <td>{{hole.game_link.player.name}}</td>
+                            <td>{{hole.game_link.player.name|truncatechars:15}}</td>
+                            <td><button class="btn btn-primary btn-sm change-score-button" data-change-type="par" data-par-value="{{hole.current_par}}">Par</button></td>
                             <td>
                                 <button class="btn btn-primary btn-sm change-score-button" data-change-type="subtract">-</button>
                                 <span class="text-input">
@@ -20,6 +21,7 @@
                                 </span>
                                 <button class="btn btn-primary btn-sm change-score-button" data-change-type="add">+</button>
                             </td>
+                            <td><button class="btn btn-primary btn-sm max-score-button change-score-button" data-change-type="max" data-par-value="{{hole.current_par}}">Max</button></td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -36,7 +38,7 @@
                 <a href="{% url 'home:play-game' game_data.id next_hole_score.id %}" class="btn btn-primary btn-sm">Next Hole</a>
                 {% else %}
                 <button class="btn btn-primary btn-sm disabled">Next Hole</button>
-                {% endif %}  
+                {% endif %}
             </div>
         </div>
     </div>
@@ -45,13 +47,17 @@
 
 {% block page_scripts %}
 <script>
+ function getParDataValue(eventTarget) {
+     return parseInt(event.target.dataset.parValue, 10);
+ };
+
  document.querySelectorAll(".change-score-button").forEach((el) => {
      el.addEventListener("click", (event) => {
          const changeType = event.target.dataset.changeType;
-         const changeTarget = event.target.parentNode.querySelector("input");
+         const changeTarget = event.target.parentNode.parentNode.querySelector("input");
          const inputVal = parseInt(changeTarget.value, 10);
          let changed = false;
-         
+
          if (changeType == "subtract") {
              if (inputVal == 0) {
                  return;
@@ -60,6 +66,14 @@
              changed = true;
          } else if (changeType == "add") {
              changeTarget.value = inputVal + 1;
+             changed = true;
+         } else if (changeType == "par") {
+             const parValue = getParDataValue(event.target);
+             changeTarget.value = parValue;
+             changed = true;
+         } else if (changeType == "max") {
+             const parValue = getParDataValue(event.target);
+             changeTarget.value = parValue * 2;
              changed = true;
          }
 
