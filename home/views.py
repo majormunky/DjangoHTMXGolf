@@ -224,12 +224,13 @@ def game_detail(request, pk):
 
 
 @login_required
-def play_game(request, game_pk, hole_score_pk):
-    hole_score_data = get_object_or_404(models.HoleScore, pk=hole_score_pk)
+def play_game(request, game_pk, hole_pk):
+    hole_data = get_object_or_404(models.Hole, pk=hole_pk)
     game_data = get_object_or_404(models.Game, pk=game_pk)
-    hole_data = hole_score_data.hole
+    # hole_score_data = get_object_or_404(models.HoleScore, pk=hole_score_pk)
+    # hole_score_data = models.HoleScore.objects.filter(hole=hole_data, game_link__game=game_data)
 
-    hole_list = models.HoleScore.objects.filter(game_link__game=game_data).order_by("hole__order")
+    hole_list = game_data.get_holes()
 
     prev_hole_score = models.HoleScore.objects.filter(
         hole__course=game_data.course,
@@ -256,7 +257,7 @@ def play_game(request, game_pk, hole_score_pk):
             "prev_hole_score": prev_hole_score,
             "next_hole_score": next_hole_score,
             "hole_list": hole_list,
-            "current_hole_score_pk": hole_score_pk
+            "current_hole_pk": hole_pk
         },
     )
 

@@ -30,23 +30,23 @@
             </div>
             <div class="card-footer d-flex justify-content-between">
                 {% if prev_hole_score %}
-                <a href="{% url 'home:play-game' game_data.id prev_hole_score.id %}" class="btn btn-primary btn-sm">Prev Hole</a>
+                <a href="{% url 'home:play-game' game_data.id prev_hole_score.hole.id %}" class="btn btn-primary btn-sm">Prev Hole</a>
                 {% else %}
                 <button class="btn btn-primary btn-sm disabled">Prev Hole</button>
                 {% endif %}
 
                 <select class="form-select ms-2 me-2" id="hole-select">
-                    {% for hole_score in hole_list %}
-                    {% if hole_score.id == current_hole_score_pk %}
-                    <option value="{{hole_score.id}}" selected>{{hole_score.hole.name}}</option>
+                    {% for hole in hole_list %}
+                    {% if hole.id == current_hole_pk %}
+                    <option value="{{hole.id}}" selected>{{hole.name}}</option>
                     {% else %}
-                    <option value="{{hole_score.id}}">{{hole_score.hole.name}}</option>
+                    <option value="{{hole.id}}">{{hole.name}}</option>
                     {% endif %}
                     {% endfor %}
                 </select>
 
                 {% if next_hole_score %}
-                <a href="{% url 'home:play-game' game_data.id next_hole_score.id %}" class="btn btn-primary btn-sm">Next Hole</a>
+                <a href="{% url 'home:play-game' game_data.id next_hole_score.hole.id %}" class="btn btn-primary btn-sm">Next Hole</a>
                 {% else %}
                 <button class="btn btn-primary btn-sm disabled">Next Hole</button>
                 {% endif %}
@@ -58,7 +58,7 @@
 
 {% block page_scripts %}
 <script>
- const gameId = "{{game_data.id}}"
+ var gameId = "{{game_data.id}}"
  function getParDataValue(eventTarget) {
      return parseInt(event.target.dataset.parValue, 10);
  };
