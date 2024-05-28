@@ -117,7 +117,7 @@ def player_detail(request, pk):
 
 @login_required
 def games(request):
-    game_list = models.Game.objects.filter(created_by=request.user)
+    game_list = models.Game.objects.filter(created_by=request.user).order_by("-date_played")
     form = forms.GameForm()
     if request.method == "POST":
         selected_course = request.POST.get("selected_course", None)
