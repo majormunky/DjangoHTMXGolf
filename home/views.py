@@ -229,6 +229,8 @@ def play_game(request, game_pk, hole_score_pk):
     game_data = get_object_or_404(models.Game, pk=game_pk)
     hole_data = hole_score_data.hole
 
+    hole_list = models.HoleScore.objects.filter(game_link__game=game_data).order_by("hole__order")
+
     prev_hole_score = models.HoleScore.objects.filter(
         hole__course=game_data.course,
         hole__order=hole_data.order - 1,
@@ -253,6 +255,8 @@ def play_game(request, game_pk, hole_score_pk):
             "hole_scores": hole_scores,
             "prev_hole_score": prev_hole_score,
             "next_hole_score": next_hole_score,
+            "hole_list": hole_list,
+            "current_hole_score_pk": hole_score_pk
         },
     )
 

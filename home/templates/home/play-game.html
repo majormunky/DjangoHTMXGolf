@@ -12,7 +12,7 @@
                     <tbody class="align-middle">
                         {% for hole in hole_scores %}
                         <tr>
-                            <td>{{hole.game_link.player.name|truncatechars:15}}</td>
+                            <td>{{hole.game_link.player.name|truncatechars:8}}</td>
                             <td><button class="btn btn-primary btn-sm change-score-button" data-change-type="par" data-par-value="{{hole.current_par}}">Par</button></td>
                             <td>
                                 <button class="btn btn-primary btn-sm change-score-button" data-change-type="subtract">-</button>
@@ -22,6 +22,7 @@
                                 <button class="btn btn-primary btn-sm change-score-button" data-change-type="add">+</button>
                             </td>
                             <td><button class="btn btn-primary btn-sm max-score-button change-score-button" data-change-type="max" data-par-value="{{hole.current_par}}">Max</button></td>
+                            <td>33</td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -33,6 +34,16 @@
                 {% else %}
                 <button class="btn btn-primary btn-sm disabled">Prev Hole</button>
                 {% endif %}
+
+                <select class="form-select ms-2 me-2" id="hole-select">
+                    {% for hole_score in hole_list %}
+                    {% if hole_score.id == current_hole_score_pk %}
+                    <option value="{{hole_score.id}}" selected>{{hole_score.hole.name}}</option>
+                    {% else %}
+                    <option value="{{hole_score.id}}">{{hole_score.hole.name}}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
 
                 {% if next_hole_score %}
                 <a href="{% url 'home:play-game' game_data.id next_hole_score.id %}" class="btn btn-primary btn-sm">Next Hole</a>
@@ -47,6 +58,7 @@
 
 {% block page_scripts %}
 <script>
+ const gameId = "{{game_data.id}}"
  function getParDataValue(eventTarget) {
      return parseInt(event.target.dataset.parValue, 10);
  };
@@ -83,6 +95,13 @@
              changeTarget.dispatchEvent(evt);
          }
      })
+ });
+
+ document.querySelector("#hole-select").addEventListener("change", (event) => {
+     let holeScoreId = event.target.value;
+
+     let url = `/games/${gameId}/play/${holeScoreId}/`;
+     window.location.href = url;
  });
 
 </script>
