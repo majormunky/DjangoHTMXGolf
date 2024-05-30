@@ -32,7 +32,7 @@ def generate_hole_row(game):
 
     if game.holes_played == "back-9":
         offset = 9
-    
+
     for i in range(int(holes_played)):
         row.append(str(i + 1 + offset))
 
@@ -78,7 +78,7 @@ def generate_header(game):
 
     first_row = generate_hole_row(game)
     data.append(first_row)
-    
+
     second_row = generate_par_row(game)
     data.append(second_row)
 
@@ -124,7 +124,6 @@ def generate_score_data(game):
             player_row.append(str(player_total_score))
         data.append(player_row)
     return data
-        
 
 
 def generate_data_for_scorecard(game):

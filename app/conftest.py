@@ -89,4 +89,3 @@ def eighteen_hole_game(eighteen_hole_golf_course, normal_user, player_one):
 def authenticated_client(client, normal_user):
     client.force_login(normal_user)
     return client
-

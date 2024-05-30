@@ -44,6 +44,6 @@ def setup_scores_for_game(game_data):
             ).exists()
 
             if not existing_score:
-                hole_score = models.HoleScore.objects.create(
+                models.HoleScore.objects.create(
                     hole=hole, current_par=hole.par, score=0, game_link=link
                 )

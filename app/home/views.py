@@ -44,9 +44,14 @@ def golf_course_detail(request, pk):
         if form.is_valid():
             form.save()
             return render(
-                request, "home/fragments/course-detail-panel.html", {"obj": course_data, "front_holes": front_holes, "back_holes" : back_holes}
+                request,
+                "home/fragments/course-detail-panel.html",
+                {"obj": course_data, "front_holes": front_holes, "back_holes": back_holes}
             )
-    return render(request, "home/golf-course-detail.html", {"obj": course_data, "front_holes": front_holes, "back_holes" : back_holes})
+    return render(
+        request,
+        "home/golf-course-detail.html",
+        {"obj": course_data, "front_holes": front_holes, "back_holes": back_holes})
 
 
 def hole_detail(request, course_pk, hole_pk):
@@ -128,7 +133,7 @@ def games(request):
 
         if all([selected_course, holes]):
             course_data = models.GolfCourse.objects.filter(pk=selected_course).first()
-            new_game = models.Game.objects.create(
+            models.Game.objects.create(
                 course=course_data,
                 holes_played=holes,
                 league_game=league_game,
