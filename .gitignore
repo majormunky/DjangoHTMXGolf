@@ -2,6 +2,7 @@
 
 .pyv/
 .env
+.env.dev
 *.pyc
 db.sqlite3
 .DS_Store
