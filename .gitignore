@@ -8,4 +8,4 @@
 *.pyc
 db.sqlite3
 .DS_Store
-app/static/admin/
+app/static/
