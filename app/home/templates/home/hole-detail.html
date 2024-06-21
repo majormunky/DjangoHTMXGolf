@@ -54,7 +54,7 @@
                     <tbody class="align-middle">
                         {% for loc_data in location_list %}
                         <tr>
-                            <td><a href="#" class="btn btn-primary btn-sm">View</a></td>
+                            <td><button class="btn btn-primary btn-sm update_location" data-loc-id="{{loc_data.id}}">View</a></td>
                             <td>{{loc_data.get_name_display}}</td>
                         </tr>
                         {% endfor %}
@@ -128,6 +128,35 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="update-location-modal" tabindex="-1" aria-labelledby="update-location-modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Update Location</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Latitude</label>
+                    <input type="text" class="form-control" id="update-latitude">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Longitude</label>
+                    <input type="text" class="form-control" id="update-longitude">
+                </div>
+                <div class="mb-3">
+                    <button class="btn btn-primary btn-sm" id="update-location-button">Get Location</button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary btn-sm" id="save-updated-location-button">Save Location</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
 
 {% block page_scripts %}
@@ -139,6 +168,8 @@
  const holeId = "{{obj.id}}";
  const addLocationUrl = "{% url 'home:ajax-add-location' obj.id %}";
  const csrfToken = "{{csrf_token}}";
+ let selectedLocation = null;
+ const updateLocationModalEl = document.getElementById("update-location-modal");
 
  htmx.on("htmx:beforeSwap", (e) => {
      // Response targeting #par-info => hide the modal
@@ -158,6 +189,56 @@
  const onLocationError = () => {
      console.log("Location Error!")
  }
+
+ const getUserLocation = async () => {
+     const pos = await new Promise((resolve, reject) => {
+         navigator.geolocation.getCurrentPosition(resolve, reject, {enableHighAccuracy: true, timeout: 5000});
+     });
+
+     return pos.coords;
+ };
+
+ document.querySelectorAll(".update_location").forEach((el) => {
+     el.addEventListener("click", (event) => {
+         selectedLocation = event.target.dataset.locId;
+         console.log(selectedLocation);
+         let modal = new bootstrap.Modal(updateLocationModalEl);
+         modal.show();
+     });
+ });
+
+ updateLocationModalEl.addEventListener("hide.bs.modal", (event) => {
+     selectedLocation = null;
+     document.getElementById("update-latitude").value = "";
+     document.getElementById("update-longitude").value = "";
+ });
+
+ document.getElementById("update-location-button").addEventListener("click", async (event) => {
+     const pos = await getUserLocation();
+     document.getElementById("update-latitude").value = pos.latitude;
+     document.getElementById("update-longitude").value = pos.longitude;
+ });
+
+ document.getElementById("save-updated-location-button").addEventListener("click", async (event) => {
+     const lat = document.getElementById("update-latitude").value;
+     const long = document.getElementById("update-longitude").value;
+     const data = {
+         latitude: lat,
+         longitude: long,
+         location_id: selectedLocation
+     }
+
+     const url = "{% url 'home:ajax-edit-location' %}";
+     const res = await fetch(url, {
+         method: "POST",
+         headers: {"X-CSRFToken": csrfToken},
+         body: JSON.stringify(data)
+     });
+     const jsonData = await res.json();
+     if (jsonData.status == "success") {
+         window.location.reload();
+     }
+ });
 
  document.getElementById("get-location-button").addEventListener("click", (event) => {
      if (!navigator.geolocation) {
@@ -193,7 +274,7 @@
          window.location.reload();
      } else {
          document.getElementById("location-status").textContent = jsonData.message;
-     }
+ }
  });
 </script>
 {% endblock %}

@@ -446,6 +446,27 @@ def ajax_add_location(request, pk):
 
 
 @login_required
+def ajax_edit_location(request):
+    if request.method != "POST":
+        return JsonResponse({"status": "failed"}, status_code=405)
+    data = json.loads(request.body)
+    long = data.get("longitude", None)
+    lat = data.get("latitude", None)
+    pk = data.get("location_id", None)
+    if not all([long, lat, pk]):
+        return JsonResponse({"status": "failed", "message": "Missing Data"})
+    location_data = models.Location.objects.filter(pk=pk).first()
+    if location_data is None:
+        return JsonResponse({"status": "failed", "message": "Unable to find location"}, status_code=400)
+    location_data.longitude = long
+    location_data.latitude = lat
+    location_data.save()
+
+    return JsonResponse({"status": "success"})
+
+
+
+@login_required
 def ajax_get_location_to_tee(request):
     data = json.loads(request.body)
     hole_pk = data.get("hole_pk", 0)
