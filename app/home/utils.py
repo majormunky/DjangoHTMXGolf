@@ -1,3 +1,4 @@
+from geopy import distance, units
 from . import forms
 from . import models
 
@@ -47,3 +48,11 @@ def setup_scores_for_game(game_data):
                 hole_score = models.HoleScore.objects.create(
                     hole=hole, current_par=hole.par, score=0, game_link=link
                 )
+
+
+def get_distance_between_points(pos1, pos2):
+    dist = distance.distance(pos1, pos2).miles
+    feet = round(units.feet(miles=dist), 2)
+    yards = round(feet / 3.0, 2)
+    return {"feet": feet, "yards": yards}
+

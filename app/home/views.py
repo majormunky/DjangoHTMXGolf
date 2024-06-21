@@ -443,3 +443,29 @@ def ajax_add_location(request, pk):
         hole=hole_data
     )
     return JsonResponse({"status": "success"})
+
+
+@login_required
+def ajax_get_location_to_tee(request):
+    data = json.loads(request.body)
+    hole_pk = data.get("hole_pk", 0)
+    hole_data = models.Hole.objects.filter(pk=hole_pk).first()
+    if hole_data is None:
+        return JsonResponse({"status": "failed", "message": "Unable to find hole"})
+
+    pin_location = models.Location.objects.filter(hole=hole_data, name="pin").first()
+    if pin_location is None:
+        return JsonResponse({
+            "status": "failed",
+            "message": "No Pin Location for this hole"
+        })
+
+    long = data.get("longitude", None)
+    lat = data.get("latitude", None)
+    if not all([long, lat]):
+        return JsonResponse({"status": failed})
+    dist = utils.get_distance_between_points(
+        (float(pin_location.latitude), float(pin_location.longitude)),
+        (lat, long)
+    )
+    return JsonResponse({"status": "success", "yards": dist["yards"]})

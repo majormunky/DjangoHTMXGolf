@@ -7,6 +7,8 @@
             <div class="card-header bg-primary fw-bold text-white">Score Game: {{hole_data.name}}</div>
             <div class="card-body">
                 <p class="card-text">Game: <a href="{% url 'home:game-detail' game_data.id %}">View</a></p>
+                <p class="card-text"><button class="btn btn-primary btn-sm" id="distance-button">Distance to Pin</button></p>
+                <p class="card-text d-none" id="distance-display"></p>
                 <hr>
                 <table class="table">
                     <tbody class="align-middle">
@@ -58,7 +60,9 @@
 
 {% block page_scripts %}
 <script>
- var gameId = "{{game_data.id}}"
+ var gameId = "{{game_data.id}}";
+ var holeId = "{{current_hole_pk}}";
+ const locationUrl = "{% url 'home:ajax-get-location-to-tee' %}";
  function getParDataValue(eventTarget) {
      return parseInt(event.target.dataset.parValue, 10);
  };
@@ -104,6 +108,39 @@
      window.location.href = url;
  });
 
+ const getUserLocation = async () => {
+     const pos = await new Promise((resolve, reject) => {
+         navigator.geolocation.getCurrentPosition(resolve, reject, {enableHighAccuracy: true, timeout: 5000});
+     });
+
+     return pos.coords;
+ };
+
+ document.getElementById("distance-button").addEventListener("click", async (event) => {
+     const modalEl = document.getElementById("distance-modal");
+     const userLocation = await getUserLocation();
+
+     const data = {"longitude": userLocation.longitude, "latitude": userLocation.latitude, "hole_pk": holeId};
+     const res = await fetch(locationUrl, {
+         body: JSON.stringify(data),
+         method: "POST",
+         headers: {"X-CSRFToken": "{{csrf_token}}"}
+     });
+
+     const jsonData = await res.json();
+     const distanceEl = document.getElementById("distance-display");
+     if (jsonData.status == "success") {
+         distanceEl.textContent = `Yards: ${jsonData.yards}`;
+         distanceEl.classList.remove("d-none");
+
+         setTimeout(() => {
+             distanceEl.textContent = "";
+             distanceEl.classList.add("d-none");
+         }, 5000);
+     } else {
+         distanceEl.textContent = `Error: ${jsonData.message}`;
+     }
+ })
 </script>
 {% endblock %}
 

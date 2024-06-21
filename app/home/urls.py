@@ -31,4 +31,5 @@ urlpatterns = [
     path("games/<int:pk>/finish-game/", views.htmx_finish_game, name="finish-game"),
     path("games/<int:pk>/add-player-to-game/", views.htmx_add_player_to_game, name="add-player-to-game"),
     path("games/<int:game_pk>/download-scorecard/", views.download_scorecard, name="download-scorecard"),
+    path("ajax/get-location-to-tee/", views.ajax_get_location_to_tee, name="ajax-get-location-to-tee"),
 ]

@@ -164,8 +164,11 @@
          document.getElementById("location-status").textContent = "Location is not supported";
          return
      }
-
-     navigator.geolocation.getCurrentPosition(onLocationSuccess, onLocationError);
+     const options = {
+         enableHighAccuracy: true,
+         timeout: 5000
+     }
+     navigator.geolocation.getCurrentPosition(onLocationSuccess, onLocationError, options);
  });
 
  document.getElementById("add-location-confirm-button").addEventListener("click", async (event) => {
