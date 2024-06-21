@@ -104,6 +104,13 @@ class PlayerGameLink(models.Model):
     player = models.ForeignKey("Player", on_delete=models.CASCADE)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
 
+    def get_total_score(self):
+        result = 0
+        hole_scores = HoleScore.objects.filter(game_link=self)
+        for hs in hole_scores:
+            result += hs.score
+        return result
+
 
 class HoleScore(models.Model):
     hole = models.ForeignKey(Hole, on_delete=models.CASCADE)
