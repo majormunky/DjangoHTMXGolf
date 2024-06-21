@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="row">
-    <div class="col-12">
+    <div class="col-6">
         <div class="card">
             <div class="card-header bg-primary fw-bold text-white">{{obj.name}}</div>
             <div class="card-body">
@@ -39,7 +39,58 @@
             {% endif %}
         </div>
     </div>
+    <div class="col-6">
+        <div class="card">
+            <div class="card-header bg-primary fw-bold text-white">Locations</div>
+            <div class="card-body">
+                {% if location_list %}
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>&nbsp;</th>
+                            <th>Name</th>
+                        </tr>
+                    </thead>
+                    <tbody class="align-middle">
+                        {% for loc_data in location_list %}
+                        <tr>
+                            <td><a href="#" class="btn btn-primary btn-sm">View</a></td>
+                            <td>{{loc_data.get_name_display}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p class="card-text">No locations found</p>
+                {% endif %}
+            </div>
+            <div class="card-footer"><button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#add-location-modal">Add</button></div>
+        </div>
+    </div>
 </div>
+
+<div class="modal fade" id="add-location-modal" tabindex="-1" aria-labelledby="add-location-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="add-location-modal-label">Add Location</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {{location_form|crispy}}
+                <div class="mb-3">
+                    <button id="get-location-button" class="btn btn-primary btn-sm">Get Location</button>
+                </div>
+                <div id="location-status"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary btn-sm" id="add-location-confirm-button">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div class="modal fade" id="add-tee-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -82,11 +133,63 @@
 {% block page_scripts %}
 <script>
  const modal = new bootstrap.Modal(document.getElementById("update-par-modal"))
+ const longInput = document.getElementById("id_longitude");
+ const latInput = document.getElementById("id_latitude");
+ const nameInput = document.getElementById("id_name");
+ const holeId = "{{obj.id}}";
+ const addLocationUrl = "{% url 'home:ajax-add-location' obj.id %}";
+ const csrfToken = "{{csrf_token}}";
 
  htmx.on("htmx:beforeSwap", (e) => {
      // Response targeting #par-info => hide the modal
      if (e.detail.target.id == "par-info") {
          modal.hide()
+     }
+ });
+
+
+ const onLocationSuccess = (pos) => {
+     console.log("Location Found");
+     console.log(pos)
+
+     longInput.value = pos.coords.longitude;
+     latInput.value = pos.coords.latitude;
+ }
+ const onLocationError = () => {
+     console.log("Location Error!")
+ }
+
+ document.getElementById("get-location-button").addEventListener("click", (event) => {
+     if (!navigator.geolocation) {
+         document.getElementById("location-status").textContent = "Location is not supported";
+         return
+     }
+
+     navigator.geolocation.getCurrentPosition(onLocationSuccess, onLocationError);
+ });
+
+ document.getElementById("add-location-confirm-button").addEventListener("click", async (event) => {
+     const data = {
+         "name": nameInput.value,
+         "longitude": longInput.value,
+         "latitude": latInput.value,
+     };
+
+     const res = await fetch(addLocationUrl, {
+         method: "POST",
+         headers: {"X-CSRFToken": csrfToken},
+         body: JSON.stringify(data)
+     });
+
+     const jsonData = await res.json();
+
+     if (jsonData.status == "success") {
+         longInput.value = "";
+         latInput.value = "";
+         nameInput.selectedIndex = 0;
+         window.location.reload();
+     } else {
+         document.getElementById("location-status").textContent = jsonData.message;
      }
  });
 </script>

@@ -15,6 +15,7 @@ urlpatterns = [
     path("golf-courses/<int:course_pk>/hole/<int:hole_pk>/", views.hole_detail, name="hole-detail"),
     path("golf-courses/<int:course_pk>/hole/<int:hole_pk>/create-tee/", views.htmx_create_tee_form, name="htmx-create-tee"),
     path("hole/<int:pk>/update-par/", views.update_par_for_hole, name="update-par-for-hole"),
+    path("hole/<int:pk>/add-location/", views.ajax_add_location, name="ajax-add-location"),
     path("players/", views.players, name="players"),
     path("players/<int:pk>/", views.player_detail, name="player-detail"),
     path("players/create/<slug:form_slug>/", views.htmx_create_form, name="htmx-create-player"),

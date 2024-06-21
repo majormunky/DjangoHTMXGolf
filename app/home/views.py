@@ -1,7 +1,8 @@
 import collections
+import json
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from . import models
 from . import forms
 from . import utils
@@ -54,6 +55,8 @@ def hole_detail(request, course_pk, hole_pk):
     course_data = hole_data.course
     tee_list = hole_data.tee_set.all()
     hole_form = forms.HoleParForm(instance=hole_data)
+    location_form = forms.LocationForm()
+    location_list = models.Location.objects.filter(hole=hole_data)
     if request.method == "POST":
         form = forms.TeeForm(request.POST)
         if form.is_valid():
@@ -68,6 +71,8 @@ def hole_detail(request, course_pk, hole_pk):
             "course": course_data,
             "tee_list": tee_list,
             "par_form": hole_form,
+            "location_form": location_form,
+            "location_list": location_list
         },
     )
 
@@ -413,3 +418,28 @@ def htmx_create_tee_form(request, course_pk, hole_pk):
     return render(
         request, "home/crispy-form.html", {"form": form, "form_id": "create-tee-form"}
     )
+
+
+@login_required
+def ajax_add_location(request, pk):
+    if request.method != "POST":
+        return JsonResponse({"status": "failed"}, status_code=405)
+    data = json.loads(request.body)
+    name = data.get("name", None)
+    long = data.get("longitude", None)
+    lat = data.get("latitude", None)
+    if not all([name, long, lat]):
+        return JsonResponse({"status": "failed", "message": "Missing Data"})
+    hole_data = models.Hole.objects.filter(pk=pk).first()
+    if hole_data is None:
+        return JsonResponse({"status": "failed", "message": "Unable to find hole"}, status_code=400)
+    existing_location = models.Location.objects.filter(hole=hole_data, name=name).exists()
+    if existing_location:
+        return JsonResponse({"status": "failed", "message": "Location already exists"}, status_code=406)
+    new_location = models.Location.objects.create(
+        name=name,
+        longitude=long,
+        latitude=lat,
+        hole=hole_data
+    )
+    return JsonResponse({"status": "success"})
