@@ -8,7 +8,7 @@ class GolfCourseForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
-        
+
     class Meta:
         model = models.GolfCourse
         fields = [
@@ -33,7 +33,7 @@ class TeeForm(forms.ModelForm):
                 "distance"
             )
         )
-        
+
     class Meta:
         model = models.Tee
         fields = [
@@ -44,7 +44,7 @@ class TeeForm(forms.ModelForm):
 
 class PlayerForm(forms.ModelForm):
     my_player = forms.BooleanField(required=False)
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -107,7 +107,7 @@ class GameFormNineHole(forms.ModelForm):
     HOLE_CHOICES = (("9", "9 Holes"),)
     holes = forms.ChoiceField(choices=HOLE_CHOICES)
     selected_course = forms.CharField(widget = forms.HiddenInput(), required = False)
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -138,7 +138,7 @@ class GameFormEighteenHole(forms.ModelForm):
     )
     holes = forms.ChoiceField(choices=HOLE_CHOICES)
     selected_course = forms.CharField(widget = forms.HiddenInput(), required = False)
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -159,7 +159,6 @@ class GameFormEighteenHole(forms.ModelForm):
             "league_game",
         ]
 
-        
 
 class PlayerGameLinkForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -171,7 +170,7 @@ class PlayerGameLinkForm(forms.ModelForm):
                 "player",
             )
         )
-        
+
     class Meta:
         model = models.PlayerGameLink
         fields = [
@@ -189,9 +188,31 @@ class HoleParForm(forms.ModelForm):
                 "par",
             )
         )
-        
+
     class Meta:
         model = models.Hole
         fields = [
             "par"
+        ]
+
+
+class LocationForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Fieldset(
+                "",
+                "name",
+                "longitude",
+                "latitude"
+            )
+        )
+
+    class Meta:
+        model = models.Location
+        fields = [
+            "name",
+            "longitude",
+            "latitude"
         ]
