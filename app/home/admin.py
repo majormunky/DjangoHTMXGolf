@@ -8,3 +8,5 @@ admin.site.register(models.Tee)
 admin.site.register(models.Player)
 admin.site.register(models.Game)
 admin.site.register(models.HoleScore)
+admin.site.register(models.Location)
+
