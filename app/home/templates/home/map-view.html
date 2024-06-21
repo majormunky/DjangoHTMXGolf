@@ -3,7 +3,7 @@
 {% block content %}
 <div class="row">
     <div class="col-12">
-        
+        <div id="map"></div>
     </div>
 </div>
 {% endblock %}
@@ -17,8 +17,23 @@
 ></script>
 
 <script>
-    function initMapKit() {
-        console.log("map initialized");
-    }
+ async function getMapKitAsync() {
+     if (!window.mapkit || window.mapkit.loadedLibraries.length === 0) {
+         await new Promise(resolve => { window.initMapKit = resolve });
+         delete window.initMapKit;
+     }
+     return window.mapkit;
+ }
+
+ document.addEventListener("DOMContentLoaded", async () => {
+     const mapkit = await getMapKitAsync();
+     mapkit.init({ authenticationCallback: done => {}});
+     const map = mapkit.Map("map");
+
+     mapkit.load(["annotations"]);
+     mapkit.addEventListener("load", event => {
+         console.log("Load event fired");
+     });
+ });
 </script>
 {% endblock %}
