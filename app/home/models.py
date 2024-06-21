@@ -8,6 +8,11 @@ HOLE_CHOICES = (
     ("18", "18 Holes"),
 )
 
+LOCATION_CHOICES = (
+    ("tee_box", "Tee Box"),
+    ("pin", "Pin"),
+)
+
 
 class GolfCourse(models.Model):
     name = models.CharField(max_length=128)
@@ -105,3 +110,10 @@ class HoleScore(models.Model):
     current_par = models.IntegerField(default=0)
     score = models.IntegerField(default=0)
     game_link = models.ForeignKey(PlayerGameLink, on_delete=models.CASCADE)
+
+
+class Location(models.Model):
+    name = models.CharField(max_length=255, choices=LOCATION_CHOICES)
+    hole = models.ForeignKey(Hole, on_delete=models.CASCADE)
+    longitude = models.CharField(max_length=255)
+    latitude = models.CharField(max_length=255)
