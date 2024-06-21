@@ -11,7 +11,6 @@
             <div class="card-body" id="game-player-list">
                 {% include "home/fragments/game-player-table.html" %}
             </div>
-            {% if game_data.status == "setup" %}
             <div class="card-footer">
                 <button
                     hx-get="{% url 'home:htmx-create-player-form' game_data.id %}"
@@ -20,7 +19,6 @@
                     data-bs-target="#add-player-modal"
                 >Add Player</button>
             </div>
-            {% endif %}
         </div>
     </div>
 </div>

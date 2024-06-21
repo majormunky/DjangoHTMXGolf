@@ -316,6 +316,11 @@ def htmx_add_player_to_game(request, pk):
             link = form.save(commit=False)
             link.game = game_data
             link.save()
+            # normally when starting a game we setup the scores
+            # but if a player is added late, we add them when
+            # a player is added
+            if game_data.status == "active":
+                utils.setup_scores_for_game(game_data)
         return render(
             request,
             "home/fragments/game-player-table.html",
