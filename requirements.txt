@@ -5,6 +5,8 @@ crispy-bootstrap5==2023.10
 Django==5.0.1
 django-crispy-forms==2.1
 django-debug-toolbar==4.3.0
+geographiclib==2.0
+geopy==2.4.1
 gunicorn==21.2.0
 iniconfig==2.0.0
 packaging==23.2
