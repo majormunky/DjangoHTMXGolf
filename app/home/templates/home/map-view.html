@@ -27,10 +27,43 @@
 
  document.addEventListener("DOMContentLoaded", async () => {
      const mapkit = await getMapKitAsync();
-     const map = new mapkit.Map("map");
+     const map = new mapkit.Map("map", {
+         center: new mapkit.Coordinate(37.334883, -122.008977)
+     });
 
      mapkit.addEventListener("load", event => {
          console.log("Load event fired");
+
+         var people = [
+             { title: "Juan Chavez",
+               coordinate: new mapkit.Coordinate(37.3349, -122.0090201),
+               role: "developer",
+               building: "HQ" },
+             { title: "Anne Johnson",
+               coordinate: new mapkit.Coordinate(37.722319, -122.434979),
+               role: "manager",
+               building: "HQ" }
+         ];
+
+
+         var factory = function(coordinate, options) {
+             var div = document.createElement("div"),
+                 name = options.title,           // "Juan Chavez"
+                 parts = name.split(' ');        // ["Chavez", "Juan"]
+             div.textContent = parts[0].charAt(0) + parts[1].charAt(0);    // "JA"
+             div.className = "circle-annotation";
+             return div;
+         };
+
+
+         people.forEach(function(person) {
+             var options = {
+                 title: person.title,
+                 data: { role: person.role, building: person.building }
+             };
+             var annotation = new mapkit.Annotation(person.coordinate, factory, options);
+             map.addAnnotation(annotation);
+         });
      });
  });
 </script>
