@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        
+    </div>
+</div>
+{% endblock %}
+
+{% block page_scripts %}
+<script src="https://cdn.apple-mapkit.com/mk/5.0.x/mapkit.core.js"
+        crossorigin async
+        data-callback="initMapKit"
+        data-libraries="services,full-map,geojson"
+        data-token="eyJraWQiOiI5NzVYR1dHVFM1IiwidHlwIjoiSldUIiwiYWxnIjoiRVMyNTYifQ.eyJpc3MiOiI4MktYNzhUTjI1IiwiaWF0IjoxNzE5MDA5MTgwLCJvcmlnaW4iOiIqLmpvc2hicmlnaHQuZGV2In0.Jv21WmuZnF4JF79eK_YfBB1NEvSyhn38A2eQDWj8Z2XLQXwCZ7RDPGsyRNoLurHHN1OP-D8y7S-mkXnqdUafLQ"
+></script>
+
+
+<script>
+    function initMapKit() {
+        console.log("map initialized");
+    }
+</script>
+{% endblock %}

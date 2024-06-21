@@ -7,7 +7,10 @@
             <div class="card-header bg-primary fw-bold text-white">Score Game: {{hole_data.name}}</div>
             <div class="card-body">
                 <p class="card-text">Game: <a href="{% url 'home:game-detail' game_data.id %}">View</a></p>
-                <p class="card-text"><button class="btn btn-primary btn-sm" id="distance-button">Distance to Pin</button></p>
+                <p class="card-text">
+                    <button class="btn btn-primary btn-sm" id="distance-button">Distance to Pin</button>
+                    <a href="{% url 'home:map-view' game_data.id hole_data.id %}" class="btn btn-secondary btn-sm">Map View</a>
+                </p>
                 <p class="card-text d-none" id="distance-display"></p>
                 <hr>
                 <table class="table">

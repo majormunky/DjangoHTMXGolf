@@ -229,6 +229,13 @@ def game_detail(request, pk):
 
 
 @login_required
+def map_view_of_hole(request, game_pk, hole_pk):
+    hole_data = get_object_or_404(models.Hole, pk=hole_pk)
+    game_data = get_object_or_404(models.Game, pk=game_pk)
+    return render(request, "home/map-view.html", {"game_data": game_data, "hole_data": hole_data})
+
+
+@login_required
 def play_game(request, game_pk, hole_pk):
     hole_data = get_object_or_404(models.Hole, pk=hole_pk)
     game_data = get_object_or_404(models.Game, pk=game_pk)

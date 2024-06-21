@@ -22,6 +22,7 @@ urlpatterns = [
     path("games/", views.games, name="games"),
     path("games/<int:pk>/", views.game_detail, name="game-detail"),
     path("games/<int:game_pk>/play/<int:hole_pk>/", views.play_game, name="play-game"),
+    path("map-view/games/<int:game_pk>/hole/<int:hole_pk>/", views.map_view_of_hole, name="map-view"),
     path("games/create/<slug:form_slug>/", views.htmx_create_form, name="htmx-create-game"),
     path("games/test-create/", views.htmx_create_game_form, name="htmx-create-game-form-test"),
     path("games/<int:pk>/add-player/", views.htmx_create_players_form, name="htmx-create-player-form"),
