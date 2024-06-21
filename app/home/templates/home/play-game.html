@@ -24,7 +24,7 @@
                                 <button class="btn btn-primary btn-sm change-score-button" data-change-type="add">+</button>
                             </td>
                             <td><button class="btn btn-primary btn-sm max-score-button change-score-button" data-change-type="max" data-par-value="{{hole.current_par}}">Max</button></td>
-                            <td>33</td>
+                            <td>{{hole.game_link.get_total_score}}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -62,7 +62,8 @@
 <script>
  var gameId = "{{game_data.id}}";
  var holeId = "{{current_hole_pk}}";
- const locationUrl = "{% url 'home:ajax-get-location-to-tee' %}";
+ var locationUrl = "{% url 'home:ajax-get-location-to-tee' %}";
+
  function getParDataValue(eventTarget) {
      return parseInt(event.target.dataset.parValue, 10);
  };
@@ -108,7 +109,7 @@
      window.location.href = url;
  });
 
- const getUserLocation = async () => {
+ async function getUserLocation() {
      const pos = await new Promise((resolve, reject) => {
          navigator.geolocation.getCurrentPosition(resolve, reject, {enableHighAccuracy: true, timeout: 5000});
      });
