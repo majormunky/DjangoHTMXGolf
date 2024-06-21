@@ -47,14 +47,18 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
+                            {% if request.user_is.authenticated %}
                             <th>&nbsp;</th>
+                            {% endif %}
                             <th>Name</th>
                         </tr>
                     </thead>
                     <tbody class="align-middle">
                         {% for loc_data in location_list %}
                         <tr>
+                            {% if request.user.is_authenticated %}
                             <td><button class="btn btn-primary btn-sm update_location" data-loc-id="{{loc_data.id}}">View</a></td>
+                            {% endif %}
                             <td>{{loc_data.get_name_display}}</td>
                         </tr>
                         {% endfor %}
@@ -64,7 +68,9 @@
                 <p class="card-text">No locations found</p>
                 {% endif %}
             </div>
+            {% if request.user.is_authenticated %}
             <div class="card-footer"><button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#add-location-modal">Add</button></div>
+            {% endif %}
         </div>
     </div>
 </div>
