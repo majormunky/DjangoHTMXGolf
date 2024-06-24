@@ -9,62 +9,35 @@
 {% endblock %}
 
 {% block page_scripts %}
-<script src="https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.core.js"
-        crossorigin async
-        data-callback="initMapKit"
-        data-libraries="services,full-map,geojson,annotations"
-        data-initial-token="eyJraWQiOiI5NzVYR1dHVFM1IiwidHlwIjoiSldUIiwiYWxnIjoiRVMyNTYifQ.eyJpc3MiOiI4MktYNzhUTjI1IiwiaWF0IjoxNzE5MDA5MTgwLCJvcmlnaW4iOiIqLmpvc2hicmlnaHQuZGV2In0.Jv21WmuZnF4JF79eK_YfBB1NEvSyhn38A2eQDWj8Z2XLQXwCZ7RDPGsyRNoLurHHN1OP-D8y7S-mkXnqdUafLQ"
+<script
+    src="https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.core.js"
+    crossorigin async
+    data-callback="initMapKit"
+    data-libraries="map"
+    data-initial-token="eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ikw2NjU2VTVGQTQifQ.eyJpc3MiOiI4MktYNzhUTjI1IiwiaWF0IjoxNzE5MjQzNzE5LCJleHAiOjE3MzU2MDMyMDAsIm9yaWdpbiI6Imh0dHBzOi8vZ29sZi5qb3NoYnJpZ2h0LmRldiJ9.kBJPZ9ROPmnKagF8zuRJr41eU5ZnqK1a8weHX4IcQk2hZG63uE14oElviuWQuek8fUqgPDSAsWBmsJp1LeDegQ"
 ></script>
+<script type="module">
 
-<script>
- async function getMapKitAsync() {
+ (async () => {
+     const tokenID = "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ikw2NjU2VTVGQTQifQ.eyJpc3MiOiI4MktYNzhUTjI1IiwiaWF0IjoxNzE5MjQzNzE5LCJleHAiOjE3MzU2MDMyMDAsIm9yaWdpbiI6Imh0dHBzOi8vZ29sZi5qb3NoYnJpZ2h0LmRldiJ9.kBJPZ9ROPmnKagF8zuRJr41eU5ZnqK1a8weHX4IcQk2hZG63uE14oElviuWQuek8fUqgPDSAsWBmsJp1LeDegQ";
+
      if (!window.mapkit || window.mapkit.loadedLibraries.length === 0) {
+         // mapkit.core.js or the libraries are not loaded yet.
+         // Set up the callback and wait for it to be called.
          await new Promise(resolve => { window.initMapKit = resolve });
+
+         // Clean up
          delete window.initMapKit;
      }
-     return window.mapkit;
- }
 
- document.addEventListener("DOMContentLoaded", async () => {
-     const mapkit = await getMapKitAsync();
-     const map = new mapkit.Map("map", {
-         center: new mapkit.Coordinate(37.334883, -122.008977)
+     mapkit.init({
+         authorizationCallback: function(done) {
+             done(tokenID);
+         }
      });
 
-     mapkit.addEventListener("load", event => {
-         console.log("Load event fired");
+     const map = new mapkit.Map("map");
+ })();
 
-         var people = [
-             { title: "Juan Chavez",
-               coordinate: new mapkit.Coordinate(37.3349, -122.0090201),
-               role: "developer",
-               building: "HQ" },
-             { title: "Anne Johnson",
-               coordinate: new mapkit.Coordinate(37.722319, -122.434979),
-               role: "manager",
-               building: "HQ" }
-         ];
-
-
-         var factory = function(coordinate, options) {
-             var div = document.createElement("div"),
-                 name = options.title,           // "Juan Chavez"
-                 parts = name.split(' ');        // ["Chavez", "Juan"]
-             div.textContent = parts[0].charAt(0) + parts[1].charAt(0);    // "JA"
-             div.className = "circle-annotation";
-             return div;
-         };
-
-
-         people.forEach(function(person) {
-             var options = {
-                 title: person.title,
-                 data: { role: person.role, building: person.building }
-             };
-             var annotation = new mapkit.Annotation(person.coordinate, factory, options);
-             map.addAnnotation(annotation);
-         });
-     });
- });
 </script>
 {% endblock %}
